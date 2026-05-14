@@ -24,6 +24,11 @@ const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "seed", label: "Database Seeding", icon: "storage" },
 ];
 
+// Icon helper — sizes override the base 24px via Tailwind utilities (base layer)
+function Icon({ name, className = "" }: { name: string; className?: string }) {
+  return <span className={`material-symbols-outlined ${className}`}>{name}</span>;
+}
+
 // ─── Root ────────────────────────────────────────────────────────────────────
 
 export default function Admin() {
@@ -32,7 +37,7 @@ export default function Admin() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fcf8ff]">
-        <span className="material-symbols-outlined animate-spin text-[#3525cd]" style={{ fontSize: 32 }}>progress_activity</span>
+        <Icon name="progress_activity" className="animate-spin text-[#3525cd] text-[32px]" />
       </div>
     );
   }
@@ -47,7 +52,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [tab, setTab] = useState<Tab>("bootcamps");
 
   return (
-    <div className="min-h-screen bg-[#fcf8ff] text-[#1b1b24]" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen bg-[#fcf8ff] text-[#1b1b24] font-inter">
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-screen w-[280px] bg-[#fcf8ff] border-r border-[#c7c4d8] shadow-sm flex flex-col py-8 z-50">
         <div className="px-8 mb-8">
@@ -66,7 +71,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   : "text-[#505f76] hover:bg-[#eae6f4] border-l-4 border-transparent"
               }`}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 22 }}>{icon}</span>
+              <Icon name={icon} className="text-[22px]" />
               <span>{label}</span>
             </button>
           ))}
@@ -74,11 +79,11 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
 
         <div className="mt-auto border-t border-[#c7c4d8] pt-3 px-3 space-y-0.5">
           <button className="w-full flex items-center gap-4 px-4 py-2.5 text-sm text-[#505f76] hover:bg-[#eae6f4] transition-colors">
-            <span className="material-symbols-outlined" style={{ fontSize: 22 }}>settings</span>
+            <Icon name="settings" className="text-[22px]" />
             <span>Settings</span>
           </button>
           <button className="w-full flex items-center gap-4 px-4 py-2.5 text-sm text-[#505f76] hover:bg-[#eae6f4] transition-colors">
-            <span className="material-symbols-outlined" style={{ fontSize: 22 }}>help</span>
+            <Icon name="help" className="text-[22px]" />
             <span>Support</span>
           </button>
         </div>
@@ -87,7 +92,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       {/* Top header */}
       <header className="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-[#fcf8ff]/80 backdrop-blur-md border-b border-[#c7c4d8] flex justify-between items-center px-6 z-40">
         <div className="flex items-center bg-[#f0ecf9] rounded-lg px-4 py-1.5 w-80">
-          <span className="material-symbols-outlined text-[#464555] mr-2" style={{ fontSize: 20 }}>search</span>
+          <Icon name="search" className="text-[#464555] mr-2 text-[20px]" />
           <input
             className="bg-transparent border-none outline-none text-sm w-full placeholder:text-[#777587]"
             placeholder={`Search ${tab}...`}
@@ -145,7 +150,6 @@ function BootcampsTab() {
         addLabel="Add New Bootcamp"
       />
 
-      {/* Stats */}
       <div className="grid grid-cols-3 gap-6 mb-6">
         <StatCard icon="rocket_launch" iconBg="bg-[#3525cd]/10" iconColor="text-[#3525cd]"
           label="Active Bootcamps" value={data.length} trend={`${data.length} total`} trendUp />
@@ -155,16 +159,13 @@ function BootcampsTab() {
           label="Avg. Completion Rate" value="94%" trend="0.4% from peak" trendUp={false} />
       </div>
 
-      {/* Table */}
       <div className="bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] shadow-sm overflow-hidden">
         <div className="p-6 border-b border-[#c7c4d8] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#464555]" style={{ fontSize: 18 }}>filter_list</span>
-              <select className="pl-9 pr-8 py-2 bg-[#f5f2ff] border border-[#c7c4d8] rounded-lg text-sm appearance-none focus:outline-none focus:border-[#3525cd]">
-                <option>All Sectors</option>
-              </select>
-            </div>
+          <div className="relative">
+            <Icon name="filter_list" className="absolute left-3 top-1/2 -translate-y-1/2 text-[#464555] text-[18px]" />
+            <select aria-label="Filter by sector" className="pl-9 pr-8 py-2 bg-[#f5f2ff] border border-[#c7c4d8] rounded-lg text-sm appearance-none focus:outline-none focus:border-[#3525cd]">
+              <option>All Sectors</option>
+            </select>
           </div>
           <p className="text-xs font-semibold tracking-widest uppercase text-[#777587]">{data.length} bootcamps</p>
         </div>
@@ -185,9 +186,7 @@ function BootcampsTab() {
                   <tr key={b.id} className="hover:bg-[#f5f2ff]/50 transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
-                        {b.image && (
-                          <img src={b.image} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0 bg-[#f0ecf9]" />
-                        )}
+                        {b.image && <img src={b.image} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0 bg-[#f0ecf9]" />}
                         <div>
                           <p className="text-sm font-bold text-[#1b1b24]">{b.title}</p>
                           <p className="text-xs text-[#464555]">{b.tagline}</p>
@@ -199,22 +198,14 @@ function BootcampsTab() {
                     </td>
                     <td className="px-6 py-4 text-sm text-[#464555]">{b.hours}h</td>
                     <td className="px-6 py-4 text-sm font-semibold text-[#1b1b24]">₹{b.priceLow?.toLocaleString()}</td>
-                    <td className="px-6 py-4">
-                      <LevelBadge level={b.level} />
-                    </td>
+                    <td className="px-6 py-4"><LevelBadge level={b.level} /></td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => { setEditing(raw); setAdding(false); }}
-                          className="p-2 hover:bg-[#eae6f4] rounded-full text-[#505f76] transition-colors"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit</span>
+                        <button aria-label={`Edit ${b.title}`} onClick={() => { setEditing(raw); setAdding(false); }} className="p-2 hover:bg-[#eae6f4] rounded-full text-[#505f76] transition-colors">
+                          <Icon name="edit" className="text-[18px]" />
                         </button>
-                        <button
-                          onClick={() => { if (confirm(`Delete "${b.title}"?`)) deleteMut.mutate(b.id); }}
-                          className="p-2 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-full transition-colors"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
+                        <button aria-label={`Delete ${b.title}`} onClick={() => { if (confirm(`Delete "${b.title}"?`)) deleteMut.mutate(b.id); }} className="p-2 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-full transition-colors">
+                          <Icon name="delete" className="text-[18px]" />
                         </button>
                       </div>
                     </td>
@@ -265,15 +256,11 @@ function CoursesTab() {
       />
 
       <div className="bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-[#c7c4d8] flex items-center justify-between bg-[#ffffff]">
-          <div className="flex gap-2">
-            <select className="bg-[#fcf8ff] border border-[#c7c4d8] rounded-lg text-sm px-4 py-2 focus:outline-none focus:border-[#3525cd]">
-              <option>All Categories</option>
-            </select>
-          </div>
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#777587]">
-            {data.length} courses
-          </p>
+        <div className="p-4 border-b border-[#c7c4d8] flex items-center justify-between bg-white">
+          <select aria-label="Filter by category" className="bg-[#fcf8ff] border border-[#c7c4d8] rounded-lg text-sm px-4 py-2 focus:outline-none focus:border-[#3525cd]">
+            <option>All Categories</option>
+          </select>
+          <p className="text-xs font-semibold tracking-widest uppercase text-[#777587]">{data.length} courses</p>
         </div>
 
         <div className="overflow-x-auto">
@@ -303,17 +290,11 @@ function CoursesTab() {
                     <td className="px-4 py-4 text-sm text-[#3525cd] font-medium">{c.instructor}</td>
                     <td className="px-4 py-4">
                       <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => { setEditing(raw); setAdding(false); }}
-                          className="p-1 hover:bg-[#3525cd]/10 text-[#3525cd] rounded-lg transition-colors"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit</span>
+                        <button aria-label={`Edit ${c.title}`} onClick={() => { setEditing(raw); setAdding(false); }} className="p-1 hover:bg-[#3525cd]/10 text-[#3525cd] rounded-lg transition-colors">
+                          <Icon name="edit" className="text-[18px]" />
                         </button>
-                        <button
-                          onClick={() => { if (confirm(`Delete "${c.title}"?`)) deleteMut.mutate(c.id); }}
-                          className="p-1 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
+                        <button aria-label={`Delete ${c.title}`} onClick={() => { if (confirm(`Delete "${c.title}"?`)) deleteMut.mutate(c.id); }} className="p-1 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors">
+                          <Icon name="delete" className="text-[18px]" />
                         </button>
                       </div>
                     </td>
@@ -389,19 +370,12 @@ function InstructorsTab() {
                   </div>
                 </div>
               </div>
-              {/* Actions */}
               <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => { setEditing(inst); setAdding(false); }}
-                  className="p-1.5 hover:bg-[#eae6f4] rounded-lg text-[#505f76] transition-colors"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>edit</span>
+                <button aria-label={`Edit ${inst.name}`} onClick={() => { setEditing(inst); setAdding(false); }} className="p-1.5 hover:bg-[#eae6f4] rounded-lg text-[#505f76] transition-colors">
+                  <Icon name="edit" className="text-[16px]" />
                 </button>
-                <button
-                  onClick={() => { if (confirm(`Delete "${inst.name}"?`)) deleteMut.mutate(inst.name); }}
-                  className="p-1.5 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span>
+                <button aria-label={`Delete ${inst.name}`} onClick={() => { if (confirm(`Delete "${inst.name}"?`)) deleteMut.mutate(inst.name); }} className="p-1.5 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors">
+                  <Icon name="delete" className="text-[16px]" />
                 </button>
               </div>
             </div>
@@ -450,7 +424,7 @@ function TestimonialsTab() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.map((t) => (
           <div key={t.id} className="bg-white rounded-xl border border-[#c7c4d8] shadow-sm p-5 group relative">
-            <span className="material-symbols-outlined text-[#3525cd]/30 mb-2 block" style={{ fontSize: 28 }}>format_quote</span>
+            <Icon name="format_quote" className="text-[#3525cd]/30 mb-2 block text-[28px]" />
             <p className="text-sm text-[#1b1b24] leading-relaxed mb-4 line-clamp-3">{t.quote}</p>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#3525cd]/10 flex items-center justify-center text-[#3525cd] font-bold text-sm shrink-0">
@@ -462,17 +436,11 @@ function TestimonialsTab() {
               </div>
             </div>
             <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => { setEditing(t); setAdding(false); }}
-                className="p-1.5 hover:bg-[#eae6f4] rounded-lg text-[#505f76] transition-colors"
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>edit</span>
+              <button aria-label={`Edit testimonial from ${t.name}`} onClick={() => { setEditing(t); setAdding(false); }} className="p-1.5 hover:bg-[#eae6f4] rounded-lg text-[#505f76] transition-colors">
+                <Icon name="edit" className="text-[16px]" />
               </button>
-              <button
-                onClick={() => { if (confirm(`Delete testimonial from "${t.name}"?`)) deleteMut.mutate(t.id); }}
-                className="p-1.5 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors"
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span>
+              <button aria-label={`Delete testimonial from ${t.name}`} onClick={() => { if (confirm(`Delete testimonial from "${t.name}"?`)) deleteMut.mutate(t.id); }} className="p-1.5 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-lg transition-colors">
+                <Icon name="delete" className="text-[16px]" />
               </button>
             </div>
           </div>
@@ -493,7 +461,7 @@ function TestimonialsTab() {
   );
 }
 
-// ─── Seed Tab ─────────────────────────────────────────────────────────────────
+// ─── Seed ─────────────────────────────────────────────────────────────────────
 
 function SeedTab() {
   const [running, setRunning] = useState(false);
@@ -544,29 +512,23 @@ function SeedTab() {
   return (
     <div>
       <PageHeader title="Database Seeding" subtitle="Import all mock data into Firestore with images uploaded to Firebase Storage." />
-
       <div className="max-w-2xl bg-white rounded-xl border border-[#c7c4d8] shadow-sm overflow-hidden">
         <div className="p-6 border-b border-[#c7c4d8] bg-[#f5f2ff]">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h3 className="text-lg font-semibold text-[#1b1b24]">Seed Database</h3>
-              <p className="text-sm text-[#464555] mt-1">
-                Imports 12 bootcamps + 12 courses + 12 instructors. Safe to re-run — overwrites existing data.
-              </p>
+              <p className="text-sm text-[#464555] mt-1">Imports 12 bootcamps + 12 courses + 12 instructors. Safe to re-run — overwrites existing data.</p>
             </div>
             <button
               onClick={runSeed}
               disabled={running || done}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold shrink-0 transition-all active:scale-[0.98] disabled:opacity-50 bg-[#3525cd] text-white hover:bg-[#4f46e5]"
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
-                {done ? "check_circle" : running ? "progress_activity" : "upload"}
-              </span>
+              <Icon name={done ? "check_circle" : running ? "progress_activity" : "upload"} className={`text-[16px] ${running ? "animate-spin" : ""}`} />
               {done ? "Seeded" : running ? "Running…" : "Seed Now"}
             </button>
           </div>
         </div>
-
         {log.length > 0 && (
           <pre className="bg-[#1b1b24] text-emerald-400 p-6 text-xs leading-relaxed overflow-auto max-h-80 font-mono">
             {log.join("\n")}
@@ -585,7 +547,7 @@ function PageHeader({ title, subtitle, onAdd, addLabel }: {
   return (
     <div className="flex justify-between items-end mb-8">
       <div>
-        <h2 className="text-4xl font-bold text-[#1b1b24]" style={{ letterSpacing: "-0.02em" }}>{title}</h2>
+        <h2 className="text-4xl font-bold text-[#1b1b24] tracking-tight">{title}</h2>
         <p className="text-base text-[#464555] mt-1">{subtitle}</p>
       </div>
       {onAdd && (
@@ -593,7 +555,7 @@ function PageHeader({ title, subtitle, onAdd, addLabel }: {
           onClick={onAdd}
           className="flex items-center gap-2 px-6 py-3 bg-[#3525cd] text-white rounded-lg text-sm font-medium shadow-sm hover:bg-[#4f46e5] active:scale-95 transition-all"
         >
-          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
+          <Icon name="add" className="text-[18px]" />
           {addLabel}
         </button>
       )}
@@ -610,14 +572,14 @@ function StatCard({ icon, iconBg, iconColor, label, value, trend, trendUp }: {
       <div className="flex justify-between items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-[#464555]">{label}</p>
-          <h3 className="text-4xl font-bold text-[#1b1b24] mt-1" style={{ letterSpacing: "-0.02em" }}>{value}</h3>
+          <h3 className="text-4xl font-bold text-[#1b1b24] mt-1 tracking-tight">{value}</h3>
         </div>
         <div className={`w-10 h-10 ${iconBg} rounded-lg flex items-center justify-center ${iconColor}`}>
-          <span className="material-symbols-outlined" style={{ fontSize: 20 }}>{icon}</span>
+          <Icon name={icon} className="text-[20px]" />
         </div>
       </div>
       <div className={`mt-6 flex items-center gap-1 text-sm font-medium ${trendUp ? "text-emerald-600" : "text-rose-600"}`}>
-        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>{trendUp ? "trending_up" : "trending_down"}</span>
+        <Icon name={trendUp ? "trending_up" : "trending_down"} className="text-[14px]" />
         <span>{trend}</span>
       </div>
     </div>
@@ -655,7 +617,7 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-16">
-      <span className="material-symbols-outlined animate-spin text-[#3525cd]" style={{ fontSize: 32 }}>progress_activity</span>
+      <Icon name="progress_activity" className="animate-spin text-[#3525cd] text-[32px]" />
     </div>
   );
 }
