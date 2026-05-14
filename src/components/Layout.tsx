@@ -5,12 +5,12 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionT
 import { Menu, X } from "lucide-react";
 
 
-const navLinks = [
+const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Products", href: "/products" },
   { label: "Solutions", href: "/solutions" },
   { label: "Platforms", href: "/platforms" },
   { label: "Industries", href: "/industries" },
-  { label: "Careers", href: "/careers" },
+  { label: "Careers", href: "https://ed.riddoff.com", external: true },
   { label: "About", href: "/company" },
   { label: "Contact", href: "/contact" },
 ];
@@ -102,22 +102,23 @@ const Navbar = () => {
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-5 xl:gap-7">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`font-satoshi text-sm font-medium transition-colors duration-200 relative group whitespace-nowrap ${
-                  atTop
-                    ? location.pathname === link.href ? "text-white" : "text-white/65 hover:text-white"
-                    : location.pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute -bottom-0.5 left-0 h-px transition-all duration-300 ${atTop ? "bg-white" : "bg-primary"} ${location.pathname === link.href ? "w-full" : "w-0 group-hover:w-full"}`}
-                />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const cls = `font-satoshi text-sm font-medium transition-colors duration-200 relative group whitespace-nowrap ${
+                atTop
+                  ? location.pathname === link.href ? "text-white" : "text-white/65 hover:text-white"
+                  : location.pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+              }`;
+              const underline = <span className={`absolute -bottom-0.5 left-0 h-px transition-all duration-300 ${atTop ? "bg-white" : "bg-primary"} ${location.pathname === link.href ? "w-full" : "w-0 group-hover:w-full"}`} />;
+              return link.external ? (
+                <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                  {link.label}{underline}
+                </a>
+              ) : (
+                <Link key={link.href} to={link.href} className={cls}>
+                  {link.label}{underline}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="hidden lg:flex items-center flex-shrink-0">
@@ -150,16 +151,29 @@ const Navbar = () => {
               className="lg:hidden bg-background border-t border-border"
             >
               <div className="flex flex-col p-6 gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="font-satoshi text-foreground font-medium hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) =>
+                  link.external ? (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMobileOpen(false)}
+                      className="font-satoshi text-foreground font-medium hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="font-satoshi text-foreground font-medium hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )
+                )}
                 <Link
                   to="/contact"
                   onClick={() => setMobileOpen(false)}
