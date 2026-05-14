@@ -1,1 +1,1 @@
-{"root":["./src/main.tsx","./src/data/courses.ts","./src/pages/careers.tsx"],"errors":true,"version":"5.9.3"}
+{"root":["./src/main.tsx","./src/vite-env.d.ts","./src/data/courses.ts","./src/pages/careers.tsx"],"version":"5.9.3"}
