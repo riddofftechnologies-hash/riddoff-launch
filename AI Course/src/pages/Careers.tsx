@@ -21,6 +21,8 @@ function CourseCard({ item }: { item: (typeof bootcamps[0] | typeof courses[0]) 
           <img
             src={item.image}
             alt={item.title}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         )}
