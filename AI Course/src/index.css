@@ -7,25 +7,25 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 206 97% 15%;
-    --card: 205 60% 97%;
-    --card-foreground: 206 97% 15%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 206 97% 15%;
-    --primary: 205 98% 24%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 214 98% 41%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 206 97% 15%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 205 40% 93%;
-    --muted-foreground: 205 40% 42%;
-    --accent: 205 98% 20%;
-    --accent-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 39%;
+    --accent: 214 60% 94%;
+    --accent-foreground: 214 98% 30%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 205 30% 85%;
-    --input: 205 30% 85%;
-    --ring: 205 98% 24%;
-    --radius: 0.75rem;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 214 98% 41%;
+    --radius: 0.5rem;
   }
 
   * { @apply border-border; }
@@ -35,4 +35,8 @@
     font-family: 'Cabinet Grotesk', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* hide scrollbar on horizontal scroll rows */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

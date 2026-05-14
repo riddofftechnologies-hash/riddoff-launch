@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#dad7ff",
+                      "surface-variant": "#e4e1ee",
+                      "on-primary-fixed": "#0f0069",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-tertiary-container": "#ffd2be",
+                      "surface-dim": "#dcd8e5",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f3effc",
+                      "surface": "#fcf8ff",
+                      "on-secondary-fixed": "#0b1c30",
+                      "secondary": "#505f76",
+                      "surface-container-low": "#f5f2ff",
+                      "primary": "#3525cd",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "surface-tint": "#4d44e3",
+                      "inverse-primary": "#c3c0ff",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-container": "#f0ecf9",
+                      "secondary-fixed": "#d3e4fe",
+                      "tertiary-container": "#a44100",
+                      "surface-container-highest": "#e4e1ee",
+                      "primary-container": "#4f46e5",
+                      "on-surface": "#1b1b24",
+                      "background": "#fcf8ff",
+                      "on-tertiary-fixed": "#351000",
+                      "tertiary": "#7e3000",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdbcc",
+                      "outline-variant": "#c7c4d8",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#ffb695",
+                      "secondary-container": "#d0e1fb",
+                      "surface-container-high": "#eae6f4",
+                      "inverse-surface": "#302f39",
+                      "surface-bright": "#fcf8ff",
+                      "on-surface-variant": "#464555",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#54647a",
+                      "on-background": "#1b1b24",
+                      "outline": "#777587",
+                      "primary-fixed": "#e2dfff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-padding": "32px",
+                      "base": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/20">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface border-r border-outline-variant shadow-sm flex flex-col py-xl z-50">
+<div class="px-xl mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">BootcampAdmin</h1>
+<p class="text-on-surface-variant font-label-sm text-label-sm">SaaS Platform Management</p>
+</div>
+<nav class="flex-1 px-md space-y-xs">
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Bootcamp</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Courses</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm bg-primary/10 border-l-4 border-primary text-primary font-semibold" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Instructors</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">format_quote</span>
+<span class="font-label-md text-label-md">Testimonials</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">rate_review</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">storage</span>
+<span class="font-label-md text-label-md">Database Seeding</span>
+</a>
+</nav>
+<div class="mt-auto px-md pt-xl space-y-xs">
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Viewport -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-lg z-40">
+<div class="flex items-center gap-md flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-xl pr-md py-xs text-body-md focus:ring-2 focus:ring-primary/20" placeholder="Search instructors, courses, or logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface leading-tight">Admin User</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Super Admin</p>
+</div>
+<img alt="Admin Profile Avatar" class="w-10 h-10 rounded-full border-2 border-surface-container-highest shadow-sm" data-alt="A professional headshot of a smiling middle-aged man with short dark hair and a neat beard. The portrait is taken against a clean, light gray studio background with soft side lighting that creates professional depth. The overall aesthetic is modern, corporate, and high-trust, matching a premium SaaS administrative interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl59oFksyyw84D6Icspij3Gpi9cL4MlQ4EcVdHR8_Y9PRhfDTDo43KLecd9rB6kNbx3A1NudLhe1iDzTphpZHlwhBEB9pVnSlEKndazNy0XDANvrsA4Lr9sqMrq3ulrFz6c90tDWuRqgqZCCG2BkX4j7zPLIbW3BhYc6Dt08MsL6Xps-K0mWuGxPtCZDN9BmpgURtNLH5FhsBH1EyaG71Syh6UFmBZmy3eU0SwnrtYx5v0rqNcAVxAdqu-szfq-fna0wiz4jNiDnc"/>
+</div>
+<button class="text-primary font-label-md text-label-md cursor-pointer hover:underline">Sign Out</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="pt-24 px-xl pb-xl">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Instructors</h2>
+<p class="text-on-surface-variant font-body-md">Manage your global faculty of bootcamp mentors and industry experts.</p>
+</div>
+<button class="flex items-center gap-sm bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md hover:shadow-lg active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">add</span>
+                    Add New Instructor
+                </button>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Instructors Data Table -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<h3 class="font-headline-md text-headline-md text-on-surface">Faculty List</h3>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">filter_list</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">download</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-lg py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider">Instructor</th>
+<th class="px-lg py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider">Title</th>
+<th class="px-lg py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Courses</th>
+<th class="px-lg py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Learners</th>
+<th class="px-lg py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<img alt="Sarah Chen" class="w-10 h-10 rounded-lg object-cover" data-alt="A vibrant professional portrait of a woman of East Asian descent, smiling warmly with styled dark hair. She is wearing a modern mustard-yellow blazer against a soft-focus office background with natural window lighting. The style is clean and high-definition, suitable for a professional ed-tech platform dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9kEWOPo9SLvzb7L8E7JUBpGg2nnX0yGEr2DqteVpi8gJQxprnPLKYXMrcgHKYAyETCwr7VFAVP03sLLgxLb7RPm6B-gxpNawPdRybtIRjYuPUHP7cLifTUkN3d_F8-8YkKb0iFq74w6xrX5JZ_9Pwic00J1e3ueeVQcJF5JKX9tedJKIyoF05CxV4a6oKvQt4LuoeJ37e298Ilj-N7kovfGdn8fluwoV3r-QMJFfSr_hB5qYUAINn1p76uD24wN77Oo21Fve5hkk"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Sarah Chen</p>
+<p class="text-[12px] text-on-surface-variant">sarah.c@bootcamp.edu</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-on-surface">Senior UX Architect</td>
+<td class="px-lg py-md text-center">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-semibold">12</span>
+</td>
+<td class="px-lg py-md text-center font-body-md text-on-surface">1,402</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs hover:bg-error/10 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<img alt="Marcus Aurelius" class="w-10 h-10 rounded-lg object-cover" data-alt="A portrait of a confident Black man in his late 20s wearing a crisp white dress shirt. He has short hair and a focused, friendly expression. The background is a minimalist tech hub with blue accent lighting, conveying an atmosphere of innovation and professional expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBZ1OhzanV-KiJADjhDskNjhw3_wFJ1GecpD9VUxrteE7G1QBLGOVWg4yg0c6ggEKnn4lurmY8tQf34N9OIEVFfIcU2MxZ6yFcVKPJLSCypemklvkT9O2khQ3xmVg1k-gfyHvfR9yTpPcCqZeEorXujQsERQ50ZQx5Ergq-jRrmu2hgiLR41zwgv05pGbiZaepjjt0zIKesNzf_cyn7asAiNxxmZg6L1kY7ZxwsDSi3lXFnVoEPVWNCO9Huen5XbBHyrsWXk-te_k"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Marcus Aurelius</p>
+<p class="text-[12px] text-on-surface-variant">m.aurelius@tech.com</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-on-surface">Fullstack Lead</td>
+<td class="px-lg py-md text-center">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-semibold">8</span>
+</td>
+<td class="px-lg py-md text-center font-body-md text-on-surface">892</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs hover:bg-error/10 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<img alt="Elena Rodriguez" class="w-10 h-10 rounded-lg object-cover" data-alt="A professional woman with curly dark hair and glasses, wearing a smart casual navy blazer. She is looking directly into the camera with an intelligent and approachable smile. The setting is a bright, modern co-working space with plants in the background, lit by soft, morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBye13lIUnmyvEshi4XIXKphCRjRaq-HMER-K2vlC7z_CzVaIZVWPVAgsnBY5coP1krvKehG4fLkaQvXE5cm1KmKzWQP7bcLQACS3KhyOaV4g6qz7qI9J5I9dtm_8ClMLFfxSAKHOPhbjCODIrZHi_cGO02c9uDfONjzLzbQa6rrdnMrnM0oxccyTpOm1bINPYwk9r04XKaliOFHzbRGKinLasYuTtMIGi-eATLHFGisg6fv890d5ljJ0QDZNpNXdIfhn4eWnlMv48"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Elena Rodriguez</p>
+<p class="text-[12px] text-on-surface-variant">elena.rod@data.io</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-on-surface">Data Scientist</td>
+<td class="px-lg py-md text-center">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full text-[12px] font-semibold">5</span>
+</td>
+<td class="px-lg py-md text-center font-body-md text-on-surface">2,105</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-xs hover:bg-error/10 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant">Showing 3 of 42 instructors</p>
+<div class="flex gap-xs">
+<button class="p-xs border border-outline-variant rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="p-xs border border-outline-variant rounded bg-primary text-on-primary"><span class="font-label-sm text-label-sm px-xs">1</span></button>
+<button class="p-xs border border-outline-variant rounded hover:bg-surface-container-high transition-colors"><span class="font-label-sm text-label-sm px-xs">2</span></button>
+<button class="p-xs border border-outline-variant rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Add New Instructor Form -->
+<div class="col-span-12 lg:col-span-4 space-y-lg">
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container">
+<h3 class="font-headline-md text-headline-md text-on-surface">Add New Instructor</h3>
+</div>
+<form class="p-lg space-y-lg">
+<!-- Photo Upload -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Instructor Photo</label>
+<div class="relative group cursor-pointer border-2 border-dashed border-outline-variant rounded-xl p-xl flex flex-col items-center justify-center bg-surface-container-low hover:border-primary/50 transition-all">
+<div class="w-16 h-16 bg-surface-container-highest rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-outline text-[32px]">cloud_upload</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Drag &amp; Drop Image</p>
+<p class="text-[12px] text-on-surface-variant">JPG, PNG up to 5MB</p>
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs">Full Name</label>
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-md py-sm font-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="e.g. Dr. Jordan Peterson" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs">Job Title</label>
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-md py-sm font-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="e.g. Principal Software Engineer" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs">Professional Bio</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg px-md py-sm font-body-md text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none" placeholder="Briefly describe the instructor's background and expertise..." rows="4"></textarea>
+</div>
+</div>
+<!-- Submit -->
+<div class="pt-sm">
+<button class="w-full bg-primary text-on-primary py-md rounded-lg font-label-md text-label-md font-bold shadow-md hover:shadow-lg active:scale-[0.98] transition-all" type="submit">
+                                    Save Instructor Profile
+                                </button>
+<button class="w-full mt-sm bg-transparent text-outline py-sm rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors" type="button">
+                                    Cancel
+                                </button>
+</div>
+</form>
+</section>
+<!-- Quick Stats Side Widget -->
+<div class="bg-primary text-on-primary p-lg rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-md text-headline-md opacity-90">Faculty Capacity</h4>
+<div class="mt-lg">
+<div class="flex justify-between items-end mb-xs">
+<span class="text-[32px] font-bold">84%</span>
+<span class="font-label-sm text-label-sm uppercase opacity-70">Utilized</span>
+</div>
+<div class="w-full bg-on-primary/20 h-2 rounded-full overflow-hidden">
+<div class="bg-on-primary h-full rounded-full" style="width: 84%"></div>
+</div>
+</div>
+<p class="mt-lg font-body-md text-[13px] leading-relaxed opacity-80">You currently have 42 active instructors. 3 pending applications require review.</p>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-[120px] opacity-10 rotate-12">groups</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

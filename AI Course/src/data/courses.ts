@@ -10,8 +10,9 @@ import fp9Img from "@/assets/fp9.png";
 import fp10Img from "@/assets/fp10.png";
 import fp11Img from "@/assets/fp11.png";
 import fp12Img from "@/assets/fp12.png";
+import type { Bootcamp, Course } from "@/types/course";
 
-export const bootcamps = [
+export const bootcamps: Bootcamp[] = [
   {
     id: "ai-dropshipping-empire",
     title: "AI Dropshipping Empire",
@@ -23,9 +24,12 @@ export const bootcamps = [
     priceLow: 1999,
     seats: 35,
     image: fp1Img,
-    instructor: "Expert AI engineer",
+    instructor: "Rahul Menon",
     outcomes: ["Live dropshipping agent", "Multi-marketplace deployment", "Revenue-generating system"],
     syllabus: ["Data scraping with Python", "AI pricing engine", "Multi-platform APIs", "Real-time monitoring dashboard"],
+    level: "Intermediate",
+    reviewCount: 1204,
+    enrolledCount: 12340,
   },
   {
     id: "ai-underwriting-engine",
@@ -38,9 +42,12 @@ export const bootcamps = [
     priceLow: 2499,
     seats: 30,
     image: fp2Img,
-    instructor: "Fintech specialist",
+    instructor: "Aishwarya Krishnan",
     outcomes: ["Credit scoring model", "Document processing pipeline", "API integration suite"],
     syllabus: ["PDF parsing", "Bureau APIs", "Risk modeling", "Compliance checks"],
+    level: "Advanced",
+    reviewCount: 892,
+    enrolledCount: 8920,
   },
   {
     id: "ai-patient-triage-system",
@@ -53,9 +60,12 @@ export const bootcamps = [
     priceLow: 2799,
     seats: 25,
     image: fp3Img,
-    instructor: "Healthcare AI engineer",
+    instructor: "Dr. Priya Nambiar",
     outcomes: ["Triage algorithm", "Risk prediction model", "Hospital integration"],
     syllabus: ["Medical NLP", "Clinical data", "Risk scoring", "HIPAA compliance"],
+    level: "Advanced",
+    reviewCount: 756,
+    enrolledCount: 7560,
   },
   {
     id: "ai-contract-analyzer",
@@ -68,9 +78,12 @@ export const bootcamps = [
     priceLow: 2299,
     seats: 28,
     image: fp4Img,
-    instructor: "Legal tech expert",
+    instructor: "Vikram Suresh",
     outcomes: ["Term extraction engine", "Risk flagging system", "Contract analysis dashboard"],
     syllabus: ["Document parsing", "Legal entity recognition", "Risk patterns", "Integration APIs"],
+    level: "Intermediate",
+    reviewCount: 1043,
+    enrolledCount: 10430,
   },
   {
     id: "ai-carbon-footprint-tracker",
@@ -83,9 +96,12 @@ export const bootcamps = [
     priceLow: 2599,
     seats: 32,
     image: fp5Img,
-    instructor: "Sustainability engineer",
+    instructor: "Meera Pillai",
     outcomes: ["Carbon calculator", "Supply chain dashboard", "ESG reporting module"],
     syllabus: ["Supply chain data", "Emission factors", "Scope 1-3 tracking", "Reporting standards"],
+    level: "Intermediate",
+    reviewCount: 634,
+    enrolledCount: 6340,
   },
   {
     id: "ai-quality-inspector",
@@ -98,13 +114,16 @@ export const bootcamps = [
     priceLow: 1699,
     seats: 25,
     image: fp6Img,
-    instructor: "Computer vision expert",
+    instructor: "Anand Rajan",
     outcomes: ["Defect detection model", "Camera system integration", "Real-time alerts"],
     syllabus: ["Object detection", "Real-time processing", "Edge deployment", "Model optimization"],
+    level: "Intermediate",
+    reviewCount: 987,
+    enrolledCount: 9870,
   },
 ];
 
-export const courses = [
+export const courses: Course[] = [
   {
     id: "ai-fundamentals-bootcamp",
     title: "AI Fundamentals Bootcamp",
@@ -116,9 +135,12 @@ export const courses = [
     weeks: 4,
     priceLow: 1999,
     image: fp7Img,
-    instructor: "AI educator",
+    instructor: "Sanjay Iyer",
     outcomes: ["LLM fundamentals", "Prompt engineering skills", "Dev environment setup"],
     syllabus: ["LLM architectures", "Embeddings & vectors", "Fine-tuning techniques", "API integrations"],
+    level: "Beginner",
+    reviewCount: 4521,
+    enrolledCount: 45210,
   },
   {
     id: "rag-systems-masterclass",
@@ -131,9 +153,12 @@ export const courses = [
     weeks: 3,
     priceLow: 2499,
     image: fp8Img,
-    instructor: "RAG specialist",
+    instructor: "Deepa Varma",
     outcomes: ["Production RAG system", "Semantic search setup", "Reranking implementation"],
     syllabus: ["Vector databases", "Chunking strategies", "Semantic search", "Evaluation metrics"],
+    level: "Intermediate",
+    reviewCount: 2876,
+    enrolledCount: 28760,
   },
   {
     id: "ai-agents-orchestration",
@@ -146,9 +171,12 @@ export const courses = [
     weeks: 4,
     priceLow: 2799,
     image: fp9Img,
-    instructor: "Agent architect",
+    instructor: "Karthik Nair",
     outcomes: ["Multi-agent system", "Tool-use implementation", "Error handling"],
     syllabus: ["ReAct framework", "Tool calling", "Agent communication", "Monitoring agents"],
+    level: "Advanced",
+    reviewCount: 1987,
+    enrolledCount: 19870,
   },
   {
     id: "computer-vision-production",
@@ -161,9 +189,12 @@ export const courses = [
     weeks: 5,
     priceLow: 2299,
     image: fp10Img,
-    instructor: "CV engineer",
+    instructor: "Divya Krishnan",
     outcomes: ["Detection system", "Segmentation model", "Edge deployment"],
     syllabus: ["Object detection", "Segmentation", "Model compression", "Deployment options"],
+    level: "Intermediate",
+    reviewCount: 2134,
+    enrolledCount: 21340,
   },
   {
     id: "mlops-model-deployment",
@@ -176,9 +207,12 @@ export const courses = [
     weeks: 4,
     priceLow: 2599,
     image: fp11Img,
-    instructor: "MLOps engineer",
+    instructor: "Arjun Menon",
     outcomes: ["Containerized model", "K8s deployment", "Monitoring setup"],
     syllabus: ["Docker & containers", "Kubernetes basics", "Model serving", "CI/CD for ML"],
+    level: "Intermediate",
+    reviewCount: 1765,
+    enrolledCount: 17650,
   },
   {
     id: "ai-ecommerce-search-recommendations",
@@ -191,12 +225,15 @@ export const courses = [
     weeks: 3,
     priceLow: 1699,
     image: fp12Img,
-    instructor: "E-commerce AI specialist",
+    instructor: "Nithya Suresh",
     outcomes: ["Search system", "Recommendation engine", "Personalization"],
     syllabus: ["Semantic search", "Collaborative filtering", "Content-based rec", "Pricing algorithms"],
+    level: "Beginner",
+    reviewCount: 3210,
+    enrolledCount: 32100,
   },
 ];
 
 export function getCourseById(id: string) {
-  return [...bootcamps, ...courses].find(c => c.id === id);
+  return [...bootcamps, ...courses].find((c) => c.id === id);
 }
