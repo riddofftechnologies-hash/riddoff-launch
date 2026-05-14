@@ -1,10 +1,29 @@
 {
-  "name": "ai-course-landing-page",
-  "version": "1.0.0",
-  "description": "Riddoff Applied AI Landing Page",
+  "name": "ed-riddoff",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "npx serve -l 3000",
-    "dev": "npx serve -l 3000"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {}
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^0.462.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react-swc": "^3.11.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19"
+  }
 }
