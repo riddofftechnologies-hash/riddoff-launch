@@ -10,6 +10,7 @@ export default {
         display: ["Cabinet Grotesk", "sans-serif"],
         melodrama: ["Cabinet Grotesk", "sans-serif"],
         satoshi: ["Cabinet Grotesk", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
