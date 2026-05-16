@@ -11,6 +11,8 @@ import SidebarFilters from "@/components/SidebarFilters";
 import WhySection from "@/components/WhySection";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
+import PathsSection from "@/containers/PathsSection";
+import QuizModal from "@/components/QuizModal";
 import type { ItemType, Bootcamp, Course } from "@/types/course";
 
 const BOOTCAMP_SECTORS = [
@@ -42,12 +44,26 @@ export default function CoursesSection() {
   const [sortBy, setSortBy] = useState("Most Popular");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   const bootcampsQuery = useBootcamps();
   const coursesQuery = useCourses();
 
+  console.log("[CoursesSection] bootcampsQuery:", {
+    status: bootcampsQuery.status,
+    dataLength: bootcampsQuery.data?.length,
+    error: bootcampsQuery.error ? String(bootcampsQuery.error) : null,
+  });
+  console.log("[CoursesSection] coursesQuery:", {
+    status: coursesQuery.status,
+    dataLength: coursesQuery.data?.length,
+    error: coursesQuery.error ? String(coursesQuery.error) : null,
+  });
+
   const bootcamps: Bootcamp[] = (bootcampsQuery.data ?? []).map(toBootcamp);
   const courses: Course[] = (coursesQuery.data ?? []).map(toCourse);
+
+  const queryError = bootcampsQuery.error || coursesQuery.error;
 
   const categories = activeTab === "bootcamps" ? BOOTCAMP_SECTORS : COURSE_CATEGORIES;
   const allItems = activeTab === "bootcamps" ? bootcamps : courses;
@@ -85,6 +101,8 @@ export default function CoursesSection() {
     <div className="bg-white min-h-screen">
       <Header />
       <Hero onSearch={(q) => setSearchQuery(q)} />
+
+      <PathsSection onOpenQuiz={() => setQuizOpen(true)} />
 
       {/* Featured horizontal scroll rows */}
       <section className="py-10 sm:py-12 overflow-hidden">
@@ -246,12 +264,18 @@ export default function CoursesSection() {
                 <div className="text-center py-16">
                   <GraduationCap size={40} className="text-muted-foreground mx-auto mb-3" />
                   <p className="text-lg font-semibold text-foreground mb-1">No programs found</p>
-                  <p className="text-sm text-muted-foreground">
-                    Try a different filter or search term.
-                  </p>
+                  {queryError ? (
+                    <p className="text-xs text-red-500 mt-2 font-mono break-all max-w-lg mx-auto">
+                      Error: {String(queryError)}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Try a different filter or search term.
+                    </p>
+                  )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filtered.map((item, idx) => (
                     <motion.div
                       key={item.id}
@@ -272,6 +296,8 @@ export default function CoursesSection() {
       <WhySection type={type} />
       <Testimonials />
       <Footer />
+
+      {quizOpen && <QuizModal onClose={() => setQuizOpen(false)} />}
     </div>
   );
 }

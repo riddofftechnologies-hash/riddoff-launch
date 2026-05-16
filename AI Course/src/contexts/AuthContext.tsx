@@ -2,15 +2,23 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
   signOut as firebaseSignOut,
   type User,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { getUserProfile, createUserProfile, updateUserProfile } from "@/lib/firestore";
+import type { FirestoreUser } from "@/types/firestore";
+
+type Role = "student" | "instructor" | "admin";
 
 interface AuthContextValue {
   user: User | null;
+  role: Role | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName?: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -18,17 +26,38 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (u) => {
-      setUser(u);
+    return onAuthStateChanged(auth, async (u) => {
+      if (u) {
+        setUser(u);
+        const profile = await getUserProfile<FirestoreUser>(u.uid);
+        setRole(profile?.role ?? "student");
+      } else {
+        setUser(null);
+        setRole(null);
+      }
       setLoading(false);
     });
   }, []);
 
   async function signIn(email: string, password: string) {
-    await signInWithEmailAndPassword(auth, email, password);
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    await updateUserProfile(cred.user.uid, { lastLoginAt: new Date() });
+  }
+
+  async function signUp(email: string, password: string, displayName?: string) {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    if (displayName) await updateProfile(cred.user, { displayName });
+    await createUserProfile(cred.user.uid, {
+      displayName: displayName ?? "",
+      email,
+      role: "student",
+      createdAt: new Date(),
+      lastLoginAt: new Date(),
+    });
   }
 
   async function signOut() {
@@ -36,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, role, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
