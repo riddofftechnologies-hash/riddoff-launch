@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -7,8 +7,17 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const [attempted, setAttempted] = useState(false);
+  const { signIn, role, user } = useAuth();
   const navigate = useNavigate();
+
+  // Once role resolves after sign-in, redirect to the right portal
+  useEffect(() => {
+    if (!attempted || !user || !role) return;
+    if (role === "admin") navigate("/admin", { replace: true });
+    else if (role === "instructor") navigate("/instructor", { replace: true });
+    else navigate("/", { replace: true });
+  }, [attempted, user, role, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -16,7 +25,7 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       await signIn(email, password);
-      navigate("/admin");
+      setAttempted(true);
     } catch {
       setError("Invalid email or password.");
     } finally {

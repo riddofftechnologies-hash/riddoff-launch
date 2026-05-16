@@ -429,6 +429,22 @@ export const updateFAQ = (id: string, data: object) => update(COLLECTIONS.FAQS, 
 
 export const deleteFAQ = (id: string) => remove(COLLECTIONS.FAQS, id);
 
+// ─── Cohorts by instructor ────────────────────────────────────────────────────
+
+export async function getCohortsByInstructor<T>(uid: string): Promise<(T & { id: string })[]> {
+  const [primary, co] = await Promise.all([
+    getAll<T>(COLLECTIONS.COHORTS, where("primaryInstructorId", "==", uid)),
+    getAll<T>(COLLECTIONS.COHORTS, where("coInstructorId", "==", uid)),
+  ]);
+  const seen = new Set<string>();
+  return [...primary, ...co].filter((c) => {
+    const id = (c as { id: string }).id;
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
 // ─── Learning Paths ───────────────────────────────────────────────────────────
 
 export const getPaths = <T>() =>

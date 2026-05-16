@@ -14,6 +14,20 @@ export function useAllEnrollments() {
   });
 }
 
+export function useEnrollmentsByCohort(cohortId: string | null) {
+  return useQuery({
+    queryKey: ["enrollments", "cohort", cohortId],
+    queryFn: () =>
+      getAll<FirestoreEnrollment>(
+        COLLECTIONS.ENROLLMENTS,
+        where("cohortId", "==", cohortId),
+        orderBy("enrolledAt", "desc")
+      ) as Promise<EnrollmentDoc[]>,
+    enabled: !!cohortId,
+    staleTime: 60 * 1000,
+  });
+}
+
 export function useEnrollmentsByCourse(courseId: string | null) {
   return useQuery({
     queryKey: ["enrollments", "course", courseId],

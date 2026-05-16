@@ -121,6 +121,7 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
 
 function AdminHeader({ tab, onLogout, initials }: { tab: Tab; onLogout: () => void; initials: string }) {
   const searchPlaceholders: Record<Tab, string> = {
+    students: "Search students, enrollments...",
     bootcamps: "Search Bootcamps...",
     courses: "Search courses, instructors...",
     instructors: "Search instructors, courses, or logs...",

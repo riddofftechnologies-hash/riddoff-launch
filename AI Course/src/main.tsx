@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Careers from "./pages/Careers";
 import CourseDetail from "./pages/CourseDetail";
 import Admin from "./pages/Admin";
+import Instructor from "./pages/Instructor";
 import AdminLoginPage from "./pages/admin/AdminLogin";
 
 const queryClient = new QueryClient({
@@ -33,6 +34,14 @@ createRoot(document.getElementById("root")!).render(
               element={
                 <ProtectedRoute requiredRole="admin">
                   <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/instructor/*"
+              element={
+                <ProtectedRoute requiredRole="instructor">
+                  <Instructor />
                 </ProtectedRoute>
               }
             />

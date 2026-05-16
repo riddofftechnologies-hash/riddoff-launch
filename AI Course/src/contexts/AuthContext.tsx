@@ -8,7 +8,7 @@ import {
   type User,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { getUserProfile, createUserProfile, updateUserProfile } from "@/lib/firestore";
+import { getUserProfile, createUserProfile } from "@/lib/firestore";
 import type { FirestoreUser } from "@/types/firestore";
 
 type Role = "student" | "instructor" | "admin";
@@ -34,7 +34,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (u) {
         setUser(u);
         const profile = await getUserProfile<FirestoreUser>(u.uid);
-        setRole(profile?.role ?? "student");
+        if (!profile) {
+          // User existed before RBAC — create their profile doc with default student role
+          await createUserProfile(u.uid, {
+            displayName: u.displayName ?? "",
+            email: u.email ?? "",
+            role: "student",
+            createdAt: new Date(),
+            lastLoginAt: new Date(),
+          });
+          setRole("student");
+        } else {
+          setRole(profile.role);
+        }
       } else {
         setUser(null);
         setRole(null);
@@ -44,8 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function signIn(email: string, password: string) {
-    const cred = await signInWithEmailAndPassword(auth, email, password);
-    await updateUserProfile(cred.user.uid, { lastLoginAt: new Date() });
+    await signInWithEmailAndPassword(auth, email, password);
   }
 
   async function signUp(email: string, password: string, displayName?: string) {
