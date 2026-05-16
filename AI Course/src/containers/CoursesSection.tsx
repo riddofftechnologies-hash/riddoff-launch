@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Zap, BookOpen, Rocket, SlidersHorizontal, GraduationCap, Loader2 } from "lucide-react";
+import { Zap, BookOpen, Rocket, SlidersHorizontal, GraduationCap, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { useBootcamps, toBootcamp } from "@/hooks/useBootcamps";
 import { useCourses, toCourse } from "@/hooks/useCourses";
 import Header from "@/components/Header";
@@ -37,8 +37,33 @@ const COURSE_CATEGORIES = [
 
 const LEVELS = ["All Levels", "Beginner", "Intermediate", "Advanced"];
 
+const MASTERCLASS_PARTS = [
+  {
+    label: "Part A",
+    title: "AI Foundations",
+    description: "Start here. Learn LLMs, embeddings, and prompt engineering — the building blocks every AI practitioner needs.",
+    bgClass: "bg-primary",
+    courseIds: ["ai-fundamentals-bootcamp"],
+  },
+  {
+    label: "Part B",
+    title: "Core AI Systems",
+    description: "Build production-grade retrieval systems, multi-agent workflows, and computer vision pipelines.",
+    bgClass: "bg-sky-500",
+    courseIds: ["rag-systems-masterclass", "ai-agents-orchestration", "computer-vision-production"],
+  },
+  {
+    label: "Part C",
+    title: "Production & MLOps",
+    description: "Ship, scale, and monitor models in the real world. Apply AI across industries with confidence.",
+    bgClass: "bg-emerald-500",
+    courseIds: ["mlops-model-deployment", "ai-ecommerce-search-recommendations"],
+  },
+];
+
 export default function CoursesSection() {
-  const [activeTab, setActiveTab] = useState<"bootcamps" | "courses">("bootcamps");
+  const [activeTab, setActiveTab] = useState<"bootcamps" | "courses" | "masterclass">("bootcamps");
+  const [openParts, setOpenParts] = useState<Record<number, boolean>>({ 0: true, 1: true, 2: true });
   const [activeFilter, setActiveFilter] = useState("All");
   const [activeLevel, setActiveLevel] = useState("All Levels");
   const [sortBy, setSortBy] = useState("Most Popular");
@@ -90,7 +115,7 @@ export default function CoursesSection() {
     filtered = [...filtered].sort((a, b) => b.priceLow - a.priceLow);
   }
 
-  function switchTab(tab: "bootcamps" | "courses") {
+  function switchTab(tab: "bootcamps" | "courses" | "masterclass") {
     setActiveTab(tab);
     setActiveFilter("All");
     setActiveLevel("All Levels");
@@ -116,14 +141,7 @@ export default function CoursesSection() {
         <div className="sticky top-16 z-40 bg-white border-b border-[#E0E0E0]">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex gap-4 sm:gap-6 overflow-x-auto hide-scrollbar">
-              <a
-                href="https://www.riddoff.com/masterclass"
-                className="py-4 px-1 font-semibold text-sm border-b-2 border-transparent text-muted-foreground hover:text-foreground shrink-0 flex items-center gap-2 no-underline"
-              >
-                <Rocket size={16} />
-                Masterclass
-              </a>
-              {(["bootcamps", "courses"] as const).map((tab) => (
+              {(["masterclass", "bootcamps", "courses"] as const).map((tab) => (
                 <button
                   key={tab}
                   type="button"
@@ -134,7 +152,9 @@ export default function CoursesSection() {
                       : "border-transparent text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {tab === "bootcamps" ? (
+                  {tab === "masterclass" ? (
+                    <><Rocket size={16} /> Masterclass</>
+                  ) : tab === "bootcamps" ? (
                     <><Zap size={16} /> Live Bootcamps</>
                   ) : (
                     <><BookOpen size={16} /> Self-Paced Courses</>
@@ -145,7 +165,77 @@ export default function CoursesSection() {
           </div>
         </div>
 
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {activeTab === "masterclass" && (
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-8 max-w-5xl mx-auto">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-foreground">Riddoff Masterclass</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                A structured curriculum split into three parts — go from AI foundations to production-ready systems.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {MASTERCLASS_PARTS.map((part, partIdx) => {
+                const partCourses = courses.filter((c) => part.courseIds.includes(c.id));
+                const isOpen = openParts[partIdx] !== false;
+
+                return (
+                  <div key={part.label} className="border border-[#E0E0E0] rounded-2xl overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setOpenParts((prev) => ({ ...prev, [partIdx]: !isOpen }))}
+                      className="w-full flex items-center justify-between px-6 py-5 hover:bg-[#FAFAFA] transition-colors text-left"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span
+                          className={`text-xs font-bold px-2.5 py-1 rounded-full text-white shrink-0 ${part.bgClass}`}
+                        >
+                          {part.label}
+                        </span>
+                        <div>
+                          <p className="font-bold text-foreground text-[15px]">{part.title}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 hidden sm:block">{part.description}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0 ml-4">
+                        <span className="text-xs text-muted-foreground hidden sm:block">{partCourses.length} course{partCourses.length !== 1 ? "s" : ""}</span>
+                        {isOpen ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+                      </div>
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-6 pb-6 pt-2 border-t border-[#E0E0E0] bg-[#FAFAFA]">
+                        <p className="text-xs text-muted-foreground mb-4 sm:hidden">{part.description}</p>
+                        {coursesQuery.isLoading ? (
+                          <div className="flex items-center gap-2 py-4 text-sm text-muted-foreground">
+                            <Loader2 size={16} className="animate-spin" /> Loading…
+                          </div>
+                        ) : partCourses.length === 0 ? (
+                          <p className="text-sm text-muted-foreground py-4">No courses available yet.</p>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {partCourses.map((course, idx) => (
+                              <motion.div
+                                key={course.id}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                              >
+                                <CourseCard item={course} type="course" />
+                              </motion.div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {activeTab !== "masterclass" && <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Mobile filter bar */}
           <div className="flex items-center gap-2 mb-6 lg:hidden">
             <div className="flex gap-2 overflow-x-auto flex-1 pb-1 hide-scrollbar">
@@ -290,7 +380,7 @@ export default function CoursesSection() {
               )}
             </div>
           </div>
-        </div>
+        </div>}
       </div>
 
       <WhySection type={type} />

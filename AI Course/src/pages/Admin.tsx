@@ -6,6 +6,8 @@ import { useInstructors, useCreateInstructor, useUpdateInstructor, useDeleteInst
 import { useTestimonials, useCreateTestimonial, useUpdateTestimonial, useDeleteTestimonial } from "@/hooks/useTestimonials";
 import { usePaths, useCreatePath, useUpdatePath, useDeletePath } from "@/hooks/usePaths";
 import { useUnits, useCreateUnit, useUpdateUnit, useDeleteUnit } from "@/hooks/useUnits";
+import { useAllEnrollments } from "@/hooks/useEnrollments";
+import { useCourses as useCoursesForFilter } from "@/hooks/useCourses";
 import BootcampForm from "@/components/Admin/BootcampForm";
 import CourseForm from "@/components/Admin/CourseForm";
 import InstructorForm from "@/components/Admin/InstructorForm";
@@ -17,9 +19,10 @@ import { bootcamps as mockBootcamps, courses as mockCourses } from "@/data/cours
 import { instructorBios } from "@/data/instructors";
 import type { FirestoreBootcamp, FirestoreTestimonial, FirestoreInstructor, FirestoreCourse, FirestorePath, FirestoreUnit } from "@/types/firestore";
 
-type Tab = "bootcamps" | "courses" | "instructors" | "testimonials" | "seed" | "paths" | "units";
+type Tab = "bootcamps" | "courses" | "instructors" | "testimonials" | "seed" | "paths" | "units" | "students";
 
 const NAV: { id: string; label: string; icon: string }[] = [
+  { id: "students", label: "Students", icon: "people" },
   { id: "bootcamps", label: "Bootcamps", icon: "school" },
   { id: "courses", label: "Courses", icon: "menu_book" },
   { id: "instructors", label: "Instructors", icon: "person" },
@@ -104,6 +107,7 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
       {/* Content */}
       <main className="pl-[280px] pt-16 min-h-screen">
         <div className="pt-8 px-8 pb-8">
+          {tab === "students" && <StudentsTab />}
           {tab === "bootcamps" && <BootcampsTab />}
           {tab === "courses" && <CoursesTab />}
           {tab === "instructors" && <InstructorsTab />}
@@ -1255,6 +1259,215 @@ function UnitsTab() {
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Students ─────────────────────────────────────────────────────────────────
+
+function StudentsTab() {
+  const { data: enrollments = [], isLoading } = useAllEnrollments();
+  const { data: courses = [] } = useCoursesForFilter();
+  const [courseFilter, setCourseFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
+
+  if (isLoading) return <Spinner />;
+
+  const filtered = enrollments.filter((e) => {
+    if (courseFilter !== "all" && e.courseId !== courseFilter) return false;
+    if (statusFilter !== "all" && e.status !== statusFilter) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      return (
+        e.displayName?.toLowerCase().includes(q) ||
+        e.email?.toLowerCase().includes(q) ||
+        e.courseTitle?.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
+
+  const totalActive = enrollments.filter((e) => e.status === "active").length;
+  const totalCompleted = enrollments.filter((e) => e.status === "completed").length;
+  const avgProgress = enrollments.length
+    ? Math.round(enrollments.reduce((s, e) => s + (e.progress ?? 0), 0) / enrollments.length)
+    : 0;
+
+  return (
+    <div>
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h2 className="text-[36px] leading-[44px] font-bold text-[#1b1b24] tracking-tight">Students</h2>
+          <p className="text-[16px] text-[#464555] mt-1">All enrolled learners across every course and cohort.</p>
+        </div>
+      </div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-12 gap-6 mb-6">
+        <div className="col-span-12 lg:col-span-4 bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] p-6 shadow-sm">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[14px] font-medium text-[#464555] uppercase tracking-wider">Total Enrolled</p>
+              <h3 className="text-[36px] font-bold text-[#1b1b24] mt-1 tracking-tight">{enrollments.length}</h3>
+            </div>
+            <div className="w-10 h-10 bg-[#3525cd]/10 rounded-lg flex items-center justify-center text-[#3525cd]">
+              <Icon name="people" />
+            </div>
+          </div>
+        </div>
+        <div className="col-span-12 lg:col-span-4 bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] p-6 shadow-sm">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[14px] font-medium text-[#464555] uppercase tracking-wider">Active</p>
+              <h3 className="text-[36px] font-bold text-[#1b1b24] mt-1 tracking-tight">{totalActive}</h3>
+            </div>
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
+              <Icon name="trending_up" />
+            </div>
+          </div>
+        </div>
+        <div className="col-span-12 lg:col-span-4 bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] p-6 shadow-sm">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[14px] font-medium text-[#464555] uppercase tracking-wider">Avg Progress</p>
+              <h3 className="text-[36px] font-bold text-[#1b1b24] mt-1 tracking-tight">{avgProgress}%</h3>
+            </div>
+            <div className="w-10 h-10 bg-[#d0e1fb] rounded-lg flex items-center justify-center text-[#54647a]">
+              <Icon name="bar_chart" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] shadow-sm overflow-hidden">
+        {/* Filters */}
+        <div className="p-5 border-b border-[#c7c4d8] flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px]">
+            <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-[#464555] text-[18px]" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, email, or course…"
+              className="w-full pl-9 pr-4 py-2 bg-[#f5f2ff] border border-[#c7c4d8] rounded-lg text-[14px] focus:outline-none focus:border-[#3525cd]"
+            />
+          </div>
+          <select
+            aria-label="Filter by course"
+            value={courseFilter}
+            onChange={(e) => setCourseFilter(e.target.value)}
+            className="pl-4 pr-8 py-2 bg-[#f5f2ff] border border-[#c7c4d8] rounded-lg text-[14px] appearance-none focus:outline-none focus:border-[#3525cd]"
+          >
+            <option value="all">All Courses</option>
+            {courses.map((c) => (
+              <option key={c.id} value={c.id}>{c.title}</option>
+            ))}
+          </select>
+          <select
+            aria-label="Filter by status"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="pl-4 pr-8 py-2 bg-[#f5f2ff] border border-[#c7c4d8] rounded-lg text-[14px] appearance-none focus:outline-none focus:border-[#3525cd]"
+          >
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+            <option value="paused">Paused</option>
+          </select>
+          <span className="ml-auto text-xs font-semibold text-[#777587] uppercase tracking-wider">
+            {filtered.length} student{filtered.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-[#f5f2ff]">
+                {["Student", "Course", "Cohort", "Progress", "Status", "Enrolled"].map((h) => (
+                  <th key={h} className="px-6 py-3 text-xs font-semibold uppercase tracking-widest text-[#505f76]">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#c7c4d8]">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-[14px] text-[#777587]">
+                    No students found.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((e) => (
+                  <tr key={e.id} className="hover:bg-[#f5f2ff]/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#3525cd]/10 flex items-center justify-center text-[#3525cd] text-xs font-bold shrink-0">
+                          {(e.displayName || e.email || "?")[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="text-[14px] font-semibold text-[#1b1b24]">{e.displayName || "—"}</p>
+                          <p className="text-[12px] text-[#464555]">{e.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-[14px] text-[#1b1b24] max-w-[180px] truncate">
+                      {e.courseTitle || e.courseId}
+                    </td>
+                    <td className="px-6 py-4 text-[14px] text-[#464555]">
+                      {e.cohortName || e.cohortId || "—"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 h-2 bg-[#e4e1ee] rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-[#3525cd] rounded-full transition-all"
+                            style={{ width: `${e.progress ?? 0}%` }}
+                          />
+                        </div>
+                        <span className="text-[13px] text-[#464555] tabular-nums">{e.progress ?? 0}%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <StatusBadge status={e.status} />
+                    </td>
+                    <td className="px-6 py-4 text-[13px] text-[#464555] tabular-nums whitespace-nowrap">
+                      {e.enrolledAt
+                        ? new Date(e.enrolledAt as unknown as string).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+                        : "—"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Footer count */}
+        {filtered.length > 0 && (
+          <div className="px-6 py-3 bg-[#f5f2ff] border-t border-[#c7c4d8]">
+            <p className="text-[13px] text-[#464555]">
+              Showing {filtered.length} of {enrollments.length} enrollments
+              {totalCompleted > 0 && ` · ${totalCompleted} completed`}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status?: string }) {
+  const styles: Record<string, string> = {
+    active: "bg-emerald-100 text-emerald-800",
+    completed: "bg-[#d0e1fb] text-[#54647a]",
+    paused: "bg-[#ffdbcc] text-[#351000]",
+    refunded: "bg-[#ffdad6] text-[#93000a]",
+  };
+  return (
+    <span className={`px-2 py-0.5 rounded text-xs font-semibold capitalize ${styles[status ?? ""] ?? "bg-[#f0ecf9] text-[#464555]"}`}>
+      {status ?? "unknown"}
+    </span>
   );
 }
 
