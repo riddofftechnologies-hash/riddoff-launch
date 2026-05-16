@@ -223,5 +223,17 @@ service cloud.firestore {
       allow read: if isSignedIn() && (resource.data.userId == uid() || isInstructor());
       allow write: if isInstructor();
     }
+
+    // ─── Learning Paths & Units (public read) ─────────────────────────────────
+
+    match /paths/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /units/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

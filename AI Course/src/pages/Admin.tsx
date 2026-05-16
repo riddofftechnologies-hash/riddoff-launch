@@ -14,12 +14,10 @@ import InstructorForm from "@/components/Admin/InstructorForm";
 import TestimonialForm from "@/components/Admin/TestimonialForm";
 import PathForm from "@/components/Admin/PathForm";
 import UnitForm from "@/components/Admin/UnitForm";
-import { uploadImage, createBootcamp, createCourse, createInstructor, nameToSlug } from "@/lib/firestore";
-import { bootcamps as mockBootcamps, courses as mockCourses } from "@/data/courses";
-import { instructorBios } from "@/data/instructors";
+import { uploadImage } from "@/lib/firestore";
 import type { FirestoreBootcamp, FirestoreTestimonial, FirestoreInstructor, FirestoreCourse, FirestorePath, FirestoreUnit } from "@/types/firestore";
 
-type Tab = "bootcamps" | "courses" | "instructors" | "testimonials" | "seed" | "paths" | "units" | "students";
+type Tab = "bootcamps" | "courses" | "instructors" | "testimonials" | "paths" | "units" | "students";
 
 const NAV: { id: string; label: string; icon: string }[] = [
   { id: "students", label: "Students", icon: "people" },
@@ -28,7 +26,6 @@ const NAV: { id: string; label: string; icon: string }[] = [
   { id: "instructors", label: "Instructors", icon: "person" },
   { id: "testimonials", label: "Testimonials", icon: "format_quote" },
   { id: "reviews", label: "Reviews", icon: "rate_review" },
-  { id: "seed", label: "Database Seeding", icon: "storage" },
   { id: "paths", label: "Learning Paths", icon: "route" },
   { id: "units", label: "Learning Units", icon: "view_module" },
 ];
@@ -112,7 +109,6 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
           {tab === "courses" && <CoursesTab />}
           {tab === "instructors" && <InstructorsTab />}
           {tab === "testimonials" && <TestimonialsTab />}
-          {tab === "seed" && <SeedTab />}
           {tab === "paths" && <PathsTab />}
           {tab === "units" && <UnitsTab />}
         </div>
@@ -129,7 +125,6 @@ function AdminHeader({ tab, onLogout, initials }: { tab: Tab; onLogout: () => vo
     courses: "Search courses, instructors...",
     instructors: "Search instructors, courses, or logs...",
     testimonials: "Search testimonials...",
-    seed: "Search data assets...",
     paths: "Search learning paths...",
     units: "Search learning units...",
   };
@@ -783,205 +778,6 @@ function TestimonialsTab() {
 
 // ─── Seed / Database Management ───────────────────────────────────────────────
 
-function SeedTab() {
-  const [running, setRunning] = useState(false);
-  const [done, setDone] = useState(false);
-  const [log, setLog] = useState<string[]>([]);
-
-  function append(msg: string) { setLog((prev) => [...prev, msg]); }
-
-  async function runSeed() {
-    setRunning(true); setLog([]);
-    try {
-      append("[INFO] Initializing connection to Firestore...");
-      for (const [name, bio] of Object.entries(instructorBios)) {
-        await createInstructor(nameToSlug(name), { name, ...bio });
-        append(`[INFO] Instructor: ${name}`);
-      }
-      append("[INFO] Writing bootcamp collection...");
-      for (const b of mockBootcamps) {
-        let imageUrl = b.image;
-        try {
-          const res = await fetch(b.image);
-          const blob = await res.blob();
-          imageUrl = await uploadImage(new File([blob], `${b.id}.webp`, { type: blob.type }), `bootcamps/${b.id}/cover.webp`);
-        } catch { append(`[WARN] Image upload failed for ${b.title}`); }
-        await createBootcamp(b.id, { title: b.title, sector: b.sector, tagline: b.tagline, description: b.description, fullDescription: b.fullDescription, hours: b.hours, priceLow: b.priceLow, seats: b.seats, image: imageUrl, instructor: b.instructor, outcomes: b.outcomes, syllabus: b.syllabus, level: b.level, reviewCount: b.reviewCount, enrolledCount: b.enrolledCount });
-        append(`[INFO] Bootcamp: ${b.title}`);
-      }
-      append("[INFO] Writing course collection...");
-      for (const c of mockCourses) {
-        let imageUrl = c.image;
-        try {
-          const res = await fetch(c.image);
-          const blob = await res.blob();
-          imageUrl = await uploadImage(new File([blob], `${c.id}.webp`, { type: blob.type }), `courses/${c.id}/cover.webp`);
-        } catch { append(`[WARN] Image upload failed for ${c.title}`); }
-        await createCourse(c.id, { title: c.title, category: c.category, tagline: c.tagline, description: c.description, fullDescription: c.fullDescription, hours: c.hours, weeks: c.weeks, priceLow: c.priceLow, image: imageUrl, instructor: c.instructor, outcomes: c.outcomes, syllabus: c.syllabus, level: c.level, reviewCount: c.reviewCount, enrolledCount: c.enrolledCount });
-        append(`[INFO] Course: ${c.title}`);
-      }
-      append("[INFO] Batch write successful. All documents created.");
-      append("✓ SEEDING COMPLETE.");
-      setDone(true);
-    } catch (err) {
-      append(`[ERROR] ${String(err)}`);
-    } finally {
-      setRunning(false);
-    }
-  }
-
-  return (
-    <div>
-      <div className="mb-8">
-        <h2 className="text-[36px] leading-[44px] font-bold text-[#3525cd] tracking-tight">Database Management</h2>
-        <p className="text-[16px] text-[#464555]">Control the foundational data architecture and synchronization tasks.</p>
-      </div>
-
-      <div className="grid grid-cols-12 gap-6">
-        {/* Population Utility */}
-        <div className="col-span-12 lg:col-span-8">
-          <div className="bg-white border border-[#c7c4d8] p-8 rounded-xl shadow-sm">
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <h3 className="text-[20px] font-semibold text-[#1b1b24] mb-1">Population Utility</h3>
-                <p className="text-[14px] text-[#464555]">Execute a fresh migration of development environment data.</p>
-              </div>
-              <div className="p-2 bg-[#ffdbcc] rounded-lg">
-                <Icon name="database" className="text-[#351000]" />
-              </div>
-            </div>
-
-            <div className="bg-[#ffdad6]/30 border border-[#ba1a1a]/20 p-4 rounded-lg mb-8">
-              <div className="flex gap-2">
-                <Icon name="warning" className="text-[#ba1a1a] shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-[#93000a] text-[14px] font-bold">This will migrate all mock data into Firestore.</p>
-                  <p className="text-[#93000a] text-[14px] opacity-80">Existing items will be overwritten. This action is safe to re-run, but destructive to manual changes.</p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={runSeed}
-              disabled={running || done}
-              className="w-full bg-[#3525cd] text-white py-6 rounded-xl text-[20px] font-semibold flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#3525cd]/20 disabled:opacity-60"
-            >
-              <Icon name={done ? "check_circle" : running ? "progress_activity" : "rocket_launch"} className={running ? "animate-spin" : ""} />
-              {done ? "Seeding Complete" : running ? "Seeding…" : "Seed Database Now"}
-            </button>
-          </div>
-        </div>
-
-        {/* Migration Manifest */}
-        <div className="col-span-12 lg:col-span-4">
-          <div className="bg-[#f0ecf9] border border-[#c7c4d8] p-8 rounded-xl h-full">
-            <h3 className="text-xs font-semibold text-[#505f76] mb-6 uppercase tracking-wider">Migration Manifest</h3>
-            <ul className="space-y-4">
-              {[
-                { icon: "school", label: "12 Bootcamps" },
-                { icon: "menu_book", label: "12 Courses" },
-                { icon: "person", label: "12 Instructors" },
-                { icon: "format_quote", label: "Mock Testimonials" },
-              ].map(({ icon, label }) => (
-                <li key={label} className="flex items-center justify-between p-4 bg-white rounded-lg border border-[#c7c4d8]/50">
-                  <div className="flex items-center gap-2">
-                    <Icon name={icon} className="text-[#3525cd]" />
-                    <span className="text-[14px]">{label}</span>
-                  </div>
-                  <Icon name="check_circle" className="text-[#464555] text-sm" />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Global Data Ordering */}
-        <div className="col-span-12">
-          <div className="bg-white border border-[#c7c4d8] p-8 rounded-xl">
-            <div className="flex items-center gap-2 mb-6">
-              <Icon name="tune" className="text-[#3525cd]" />
-              <h3 className="text-[20px] font-semibold text-[#1b1b24]">Global Data Ordering</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-[14px] font-medium text-[#464555] mb-2">Bootcamp Sorting</label>
-                <select aria-label="Bootcamp sorting" className="w-full bg-[#fcf8ff] border border-[#c7c4d8] rounded-lg p-4 text-[14px] focus:border-[#3525cd] focus:ring-1 focus:ring-[#3525cd] outline-none">
-                  <option>Sort bootcamps by price high-to-low</option>
-                  <option>Sort bootcamps by price low-to-high</option>
-                  <option>Sort bootcamps by rating</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[14px] font-medium text-[#464555] mb-2">Course Sorting</label>
-                <select aria-label="Course sorting" className="w-full bg-[#fcf8ff] border border-[#c7c4d8] rounded-lg p-4 text-[14px] focus:border-[#3525cd] focus:ring-1 focus:ring-[#3525cd] outline-none">
-                  <option>Sort courses by date created</option>
-                  <option>Sort courses alphabetically</option>
-                  <option>Sort courses by popularity</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[14px] font-medium text-[#464555] mb-2">Instructor Listing</label>
-                <select aria-label="Instructor listing order" className="w-full bg-[#fcf8ff] border border-[#c7c4d8] rounded-lg p-4 text-[14px] focus:border-[#3525cd] focus:ring-1 focus:ring-[#3525cd] outline-none">
-                  <option>Group by department</option>
-                  <option>Sort by years of experience</option>
-                  <option>Sort by student count</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Migration Console */}
-        <div className="col-span-12">
-          <div className="bg-[#302f39] text-[#f3effc] p-8 rounded-xl shadow-lg">
-            <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-[#ba1a1a]" />
-                <span className="w-3 h-3 rounded-full bg-[#ffdbcc]" />
-                <span className="w-3 h-3 rounded-full bg-[#e2dfff]" />
-                <span className="ml-4 text-xs font-semibold opacity-50 uppercase tracking-tighter">Migration Console</span>
-              </div>
-              <button className="hover:bg-white/10 p-1 rounded-lg transition-colors">
-                <Icon name="content_copy" className="text-[18px]" />
-              </button>
-            </div>
-            <div className="font-mono text-sm space-y-2 max-h-64 overflow-y-auto">
-              {log.length === 0 ? (
-                <p className="opacity-40">Awaiting seed command...</p>
-              ) : (
-                log.map((line, i) => (
-                  <p key={i} className={`flex gap-4 ${line.startsWith("✓") ? "text-emerald-400 font-bold" : line.startsWith("[WARN]") ? "text-[#ffb695]" : line.startsWith("[ERROR]") ? "text-[#ffdad6]" : "opacity-80"}`}>
-                    {line}
-                  </p>
-                ))
-              )}
-              {running && <div className="animate-pulse bg-white/40 h-4 w-2" />}
-            </div>
-          </div>
-        </div>
-
-        {/* Visual status cards */}
-        <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="relative overflow-hidden h-48 rounded-xl group border border-[#c7c4d8] bg-[#302f39]">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#fcf8ff] via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4">
-              <span className="text-xs font-semibold text-[#3525cd] uppercase">Storage Health</span>
-              <h4 className="text-[20px] font-semibold text-[#1b1b24]">99.9% Uptime</h4>
-            </div>
-          </div>
-          <div className="relative overflow-hidden h-48 rounded-xl group border border-[#c7c4d8] bg-[#302f39]">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#fcf8ff] via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4">
-              <span className="text-xs font-semibold text-[#3525cd] uppercase">Sync Frequency</span>
-              <h4 className="text-[20px] font-semibold text-[#1b1b24]">Real-time DB Active</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
 function LevelBadge({ level }: { level?: string }) {
@@ -998,6 +794,68 @@ function LevelBadge({ level }: { level?: string }) {
   );
 }
 
+// ─── Default path seed data ───────────────────────────────────────────────────
+
+const SEED_PATHS: { id: string; data: FirestorePath }[] = [
+  {
+    id: "get-ai-job",
+    data: {
+      slug: "get-ai-job",
+      name: "Path A — Get the AI Job",
+      tagline: "Land a GCC AI/ML role in 12 weeks",
+      description: "A live cohort programme designed to get you hired as an AI/ML engineer at a GCC, startup, or product company.",
+      price: 74999,
+      format: "live-cohort",
+      duration: "12 weeks",
+      includesResidency: true,
+      color: "#F59E0B",
+      unitIds: [],
+      outcomes: ["Get hired as an AI/ML engineer", "Build a portfolio of production AI projects", "Interview at top GCCs and startups"],
+      ctaUrl: "",
+      published: true,
+      order: 1,
+    },
+  },
+  {
+    id: "build-with-ai",
+    data: {
+      slug: "build-with-ai",
+      name: "Path B — Build with AI",
+      tagline: "Ship a production AI product in 60 days",
+      description: "Self-paced with weekly group calls. For founders and product builders who want to ship an AI-powered product.",
+      price: 49999,
+      format: "self-paced-group-call",
+      duration: "Self-paced",
+      includesResidency: false,
+      color: "#6366F1",
+      unitIds: [],
+      outcomes: ["Ship a live AI product", "Build in public with a cohort of builders", "Get investor-ready feedback"],
+      ctaUrl: "",
+      published: true,
+      order: 2,
+    },
+  },
+  {
+    id: "upskill-at-work",
+    data: {
+      slug: "upskill-at-work",
+      name: "Path C — Upskill at Work",
+      tagline: "Apply AI in your current role immediately",
+      description: "Fully self-paced. Add AI skills to your existing career without switching roles.",
+      price: 39999,
+      format: "self-paced",
+      duration: "Self-paced",
+      includesResidency: false,
+      color: "#10B981",
+      unitIds: [],
+      outcomes: ["Use AI tools daily at work", "Automate repetitive tasks", "Position yourself as an AI-savvy professional"],
+      ctaUrl: "",
+      published: true,
+      order: 3,
+    },
+  },
+];
+
 // ─── Learning Paths ───────────────────────────────────────────────────────────
 
 function PathsTab() {
@@ -1007,7 +865,20 @@ function PathsTab() {
   const deleteMut = useDeletePath();
   const [editing, setEditing] = useState<(FirestorePath & { id: string }) | null>(null);
   const [page, setPage] = useState(1);
+  const [seeding, setSeeding] = useState(false);
   const PER_PAGE = 5;
+
+  async function handleSeedPaths() {
+    if (!confirm("Create the 3 default learning paths (A, B, C)? You can edit them afterwards.")) return;
+    setSeeding(true);
+    try {
+      for (const p of SEED_PATHS) {
+        await createMut.mutateAsync(p);
+      }
+    } finally {
+      setSeeding(false);
+    }
+  }
 
   if (isLoading) return <Spinner />;
 
@@ -1021,14 +892,27 @@ function PathsTab() {
           <h2 className="text-[24px] leading-8 font-semibold text-[#1b1b24] tracking-tight">Learning Paths</h2>
           <p className="text-[14px] text-[#464555] mt-1">Manage the four learning paths shown on the homepage.</p>
         </div>
-        <button
-          type="button"
-          onClick={() => setEditing(null)}
-          className="bg-[#3525cd] text-white px-6 py-2 rounded-lg text-[14px] font-medium flex items-center gap-2 shadow-sm hover:bg-[#4f46e5] active:scale-95 transition-all"
-        >
-          <Icon name="add" />
-          Add New Path
-        </button>
+        <div className="flex items-center gap-3">
+          {data.length === 0 && (
+            <button
+              type="button"
+              onClick={handleSeedPaths}
+              disabled={seeding}
+              className="bg-emerald-600 text-white px-6 py-2 rounded-lg text-[14px] font-medium flex items-center gap-2 shadow-sm hover:bg-emerald-700 active:scale-95 transition-all disabled:opacity-60"
+            >
+              <Icon name={seeding ? "progress_activity" : "auto_awesome"} className={seeding ? "animate-spin" : ""} />
+              {seeding ? "Creating…" : "Seed Default Paths (A, B, C)"}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setEditing(null)}
+            className="bg-[#3525cd] text-white px-6 py-2 rounded-lg text-[14px] font-medium flex items-center gap-2 shadow-sm hover:bg-[#4f46e5] active:scale-95 transition-all"
+          >
+            <Icon name="add" />
+            Add New Path
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-6">
