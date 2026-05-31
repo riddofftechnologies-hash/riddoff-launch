@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBootcamps, useCreateBootcamp, useUpdateBootcamp, useDeleteBootcamp, toBootcamp } from "@/hooks/useBootcamps";
 import { useCourses, useCreateCourse, useUpdateCourse, useDeleteCourse, toCourse } from "@/hooks/useCourses";
@@ -14,12 +15,15 @@ import InstructorForm from "@/components/Admin/InstructorForm";
 import TestimonialForm from "@/components/Admin/TestimonialForm";
 import PathForm from "@/components/Admin/PathForm";
 import UnitForm from "@/components/Admin/UnitForm";
+import { useWaitlist, useUpdateWaitlistEntry, useDeleteWaitlistEntry } from "@/hooks/useWaitlist";
 import { uploadImage } from "@/lib/firestore";
 import type { FirestoreBootcamp, FirestoreTestimonial, FirestoreInstructor, FirestoreCourse, FirestorePath, FirestoreUnit } from "@/types/firestore";
+import type { WaitlistEntry } from "@/lib/firestore";
 
-type Tab = "bootcamps" | "courses" | "instructors" | "testimonials" | "paths" | "units" | "students";
+type Tab = "waitlist" | "bootcamps" | "courses" | "instructors" | "testimonials" | "paths" | "units" | "students";
 
 const NAV: { id: string; label: string; icon: string }[] = [
+  { id: "waitlist", label: "Waitlist", icon: "how_to_reg" },
   { id: "students", label: "Students", icon: "people" },
   { id: "bootcamps", label: "Bootcamps", icon: "school" },
   { id: "courses", label: "Courses", icon: "menu_book" },
@@ -78,6 +82,13 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
         </nav>
 
         <div className="mt-auto space-y-[4px]">
+          <Link
+            to="/"
+            className="w-full flex items-center gap-4 px-8 py-2 text-[14px] text-[#505f76] hover:bg-[#eae6f4] transition-colors"
+          >
+            <Icon name="arrow_back" />
+            <span>Back to Site</span>
+          </Link>
           <button className="w-full flex items-center gap-4 px-8 py-2 text-[14px] text-[#505f76] hover:bg-[#eae6f4] transition-colors">
             <Icon name="settings" />
             <span>Settings</span>
@@ -104,6 +115,7 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
       {/* Content */}
       <main className="pl-[280px] pt-16 min-h-screen">
         <div className="pt-8 px-8 pb-8">
+          {tab === "waitlist" && <WaitlistTab />}
           {tab === "students" && <StudentsTab />}
           {tab === "bootcamps" && <BootcampsTab />}
           {tab === "courses" && <CoursesTab />}
@@ -121,6 +133,7 @@ function AdminDashboard({ onLogout, userEmail }: { onLogout: () => void; userEma
 
 function AdminHeader({ tab, onLogout, initials }: { tab: Tab; onLogout: () => void; initials: string }) {
   const searchPlaceholders: Record<Tab, string> = {
+    waitlist: "Search waitlist signups...",
     students: "Search students, enrollments...",
     bootcamps: "Search Bootcamps...",
     courses: "Search courses, instructors...",
@@ -778,6 +791,179 @@ function TestimonialsTab() {
 }
 
 // ─── Seed / Database Management ───────────────────────────────────────────────
+
+// ─── Waitlist ─────────────────────────────────────────────────────────────────
+
+const WL_TRACK_LABEL: Record<WaitlistEntry["track"], string> = {
+  builder: "Builder",
+  founder: "Founder Member",
+  equity: "Equity Partner",
+  unsure: "Unsure",
+};
+
+const WL_BG_LABEL: Record<WaitlistEntry["background"], string> = {
+  working: "Working professional",
+  "self-taught": "Self-taught",
+  dropout: "Dropout",
+  student: "Student / Grad",
+};
+
+const WL_STATUSES: WaitlistEntry["status"][] = ["new", "contacted", "converted"];
+
+function waitlistDate(iso: string) {
+  const d = new Date(iso);
+  return isNaN(d.getTime())
+    ? "—"
+    : d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+}
+
+function exportWaitlistCsv(rows: (WaitlistEntry & { id: string })[]) {
+  const headers = ["Name", "Email", "Track", "Background", "Idea", "Status", "Signed up"];
+  const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [headers.join(",")];
+  for (const r of rows) {
+    lines.push(
+      [
+        r.name,
+        r.email,
+        WL_TRACK_LABEL[r.track],
+        WL_BG_LABEL[r.background],
+        r.idea,
+        r.status,
+        new Date(r.createdAt).toLocaleString(),
+      ]
+        .map(esc)
+        .join(",")
+    );
+  }
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "riddoff-waitlist.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function WaitlistTab() {
+  const { data = [], isLoading } = useWaitlist();
+  const updateMut = useUpdateWaitlistEntry();
+  const deleteMut = useDeleteWaitlistEntry();
+
+  if (isLoading) return <Spinner />;
+
+  const byTrack = (t: WaitlistEntry["track"]) => data.filter((e) => e.track === t).length;
+
+  const stats = [
+    { label: "Total signups", value: data.length, icon: "how_to_reg" },
+    { label: "Builders", value: byTrack("builder"), icon: "construction" },
+    { label: "Founder Members", value: byTrack("founder"), icon: "rocket_launch" },
+    { label: "Equity Partners", value: byTrack("equity"), icon: "handshake" },
+  ];
+
+  return (
+    <div>
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h2 className="text-[36px] leading-[44px] font-bold text-[#1b1b24] tracking-tight">Waitlist</h2>
+          <p className="text-[16px] text-[#464555] mt-1">Founding-member signups collected before launch.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => exportWaitlistCsv(data)}
+          disabled={data.length === 0}
+          className="px-6 py-3 border border-[#c7c4d8] rounded-lg text-[14px] font-medium flex items-center gap-2 hover:bg-[#eae6f4] transition-colors disabled:opacity-50"
+        >
+          <Icon name="file_download" className="text-[18px]" />
+          Export CSV
+        </button>
+      </div>
+
+      <div className="grid grid-cols-12 gap-6">
+        {/* Stat cards */}
+        {stats.map((s) => (
+          <div key={s.label} className="col-span-6 lg:col-span-3 bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] p-6 shadow-sm">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-[14px] font-medium text-[#464555] uppercase tracking-wider">{s.label}</p>
+                <h3 className="text-[36px] font-bold text-[#1b1b24] mt-1 tracking-tight">{s.value}</h3>
+              </div>
+              <div className="w-10 h-10 bg-[#3525cd]/10 rounded-lg flex items-center justify-center text-[#3525cd]">
+                <Icon name={s.icon} />
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Table */}
+        <div className="col-span-12 bg-[#fcf8ff] rounded-xl border border-[#c7c4d8] shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-[#c7c4d8] flex items-center justify-between">
+            <h3 className="text-[20px] font-semibold text-[#1b1b24]">Signups</h3>
+            <span className="bg-[#3525cd]/10 text-[#3525cd] px-2 py-1 rounded text-xs font-semibold">{data.length} Total</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-[#f5f2ff]">
+                  {["Name", "Email", "Track", "Background", "Idea", "Signed up", "Status", ""].map((h, i) => (
+                    <th key={h || i} className="px-6 py-3 text-xs font-semibold uppercase tracking-widest text-[#505f76]">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#c7c4d8]">
+                {data.map((e) => (
+                  <tr key={e.id} className="hover:bg-[#f5f2ff]/50 transition-colors group align-top">
+                    <td className="px-6 py-4 text-[14px] font-bold text-[#1b1b24] whitespace-nowrap">{e.name}</td>
+                    <td className="px-6 py-4 text-[14px]">
+                      <a href={`mailto:${e.email}`} className="text-[#3525cd] hover:underline">{e.email}</a>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2 py-0.5 bg-[#3525cd]/10 text-[#3525cd] rounded text-xs font-semibold whitespace-nowrap">{WL_TRACK_LABEL[e.track]}</span>
+                    </td>
+                    <td className="px-6 py-4 text-[14px] text-[#464555] whitespace-nowrap">{WL_BG_LABEL[e.background]}</td>
+                    <td className="px-6 py-4 text-[14px] text-[#464555] max-w-xs">
+                      {e.idea ? <p className="line-clamp-2" title={e.idea}>{e.idea}</p> : <span className="text-[#777587]">—</span>}
+                    </td>
+                    <td className="px-6 py-4 text-[14px] text-[#464555] whitespace-nowrap">{waitlistDate(e.createdAt)}</td>
+                    <td className="px-6 py-4">
+                      <select
+                        aria-label={`Status for ${e.name}`}
+                        value={e.status}
+                        onChange={(ev) => updateMut.mutate({ id: e.id, data: { status: ev.target.value as WaitlistEntry["status"] } })}
+                        className="text-xs font-semibold border border-[#c7c4d8] rounded-md px-2 py-1 bg-white focus:outline-none focus:border-[#3525cd]"
+                      >
+                        {WL_STATUSES.map((s) => (
+                          <option key={s} value={s}>{s[0].toUpperCase() + s.slice(1)}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        type="button"
+                        aria-label={`Delete signup from ${e.name}`}
+                        onClick={() => { if (confirm(`Delete signup from "${e.name}"?`)) deleteMut.mutate(e.id); }}
+                        className="p-2 hover:bg-[#ffdad6] text-[#ba1a1a] rounded-full transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <Icon name="delete" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {data.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-12 text-center text-[14px] text-[#777587]">
+                      No signups yet. They'll appear here as people join the waitlist.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 

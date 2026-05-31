@@ -1,69 +1,44 @@
 import { motion } from "framer-motion";
-import { Eye, Users2, Send, Handshake, Clock, Code, BookOpen, Award } from "lucide-react";
+import { Hammer, Rocket, KeyRound, Users2 } from "lucide-react";
 import type { ItemType } from "@/types/course";
 
 interface WhySectionProps {
+  // Kept for call-site compatibility; copy is the same founder-first set either way.
   type: ItemType;
 }
 
-const bootcampFeatures = [
+const features = [
   {
-    icon: Eye,
-    title: "Live demo on Day 1",
-    desc: "See the finished capstone before you write a single line of code.",
+    icon: Hammer,
+    title: "Build real products",
+    desc: "You ship production software for real users — not assignments graded against a rubric.",
   },
   {
     icon: Users2,
-    title: "1 TA per 10 students",
-    desc: "Two TAs circulate during sprints so the instructor never stops.",
+    title: "Work with the principals",
+    desc: "Build alongside the engineers who actually run Riddoff Technologies, not lecturers.",
   },
   {
-    icon: Send,
-    title: "Deployed URL by Sunday",
-    desc: "Every student leaves with a live portfolio piece.",
+    icon: Rocket,
+    title: "Ship to real users",
+    desc: "Every project goes live. You leave with things people use, not a folder of demos.",
   },
   {
-    icon: Handshake,
-    title: "28 hiring partners",
-    desc: "Top graduates are routed to GCCs in Kochi, Hyderabad, Bangalore.",
+    icon: KeyRound,
+    title: "Own what you make",
+    desc: "Walk away owning your code, your product, and — for founders — equity. Not a certificate.",
   },
 ];
 
-const courseFeatures = [
-  {
-    icon: Clock,
-    title: "Learn at your own pace",
-    desc: "Access materials forever—no deadlines or pressure.",
-  },
-  {
-    icon: Code,
-    title: "Hands-on projects",
-    desc: "Build real projects with starter code and templates.",
-  },
-  {
-    icon: BookOpen,
-    title: "Expert instructors",
-    desc: "Learn from practitioners who've shipped AI in production.",
-  },
-  {
-    icon: Award,
-    title: "Career support",
-    desc: "Join alumni network and access the job board.",
-  },
-];
-
-export default function WhySection({ type }: WhySectionProps) {
-  const features = type === "bootcamp" ? bootcampFeatures : courseFeatures;
-  const label = type === "bootcamp" ? "Bootcamps" : "Courses";
-
+export default function WhySection({ type: _type }: WhySectionProps) {
   return (
     <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#F7F7F7]">
       <div className="w-full">
         <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
-          Why Riddoff {label}
+          Why Riddoff Ed
         </h2>
         <p className="text-muted-foreground mb-10">
-          What makes us different from self-study or generic courses.
+          A founder-first program — not another course platform.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

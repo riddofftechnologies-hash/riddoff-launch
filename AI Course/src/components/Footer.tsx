@@ -1,21 +1,22 @@
 import { Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
-    title: "Learn",
-    links: ["Live Bootcamps", "Self-Paced Courses", "Riddoff Masterclass", "Certifications", "Free Previews"],
+    title: "Program",
+    links: ["How it works", "Builder track", "Founder Member", "Equity Partner"],
   },
   {
     title: "Company",
-    links: ["About Riddoff", "Careers", "Press", "Blog", "Contact"],
+    links: ["About Riddoff", "Careers", "Press", "Contact"],
   },
   {
     title: "Community",
-    links: ["Alumni Network", "Forum", "Events", "Hiring Partners", "Refer a Friend"],
+    links: ["Builder network", "Demo days", "Open projects", "Refer a founder"],
   },
   {
-    title: "Support",
-    links: ["Help Centre", "Refund Policy", "Prerequisites FAQ", "Privacy Policy", "Terms of Service"],
+    title: "Legal",
+    links: ["Privacy Policy", "Terms of Service", "Code of Conduct"],
   },
 ];
 
@@ -30,11 +31,19 @@ export default function Footer() {
               <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
                 <Zap size={18} className="text-white" />
               </div>
-              <span className="font-bold text-lg">Riddoff</span>
+              <span className="font-bold text-lg">
+                Riddoff <span className="text-white/50 font-medium">Ed</span>
+              </span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed">
-              AI education for the professionals who build the future.
+              Build. Ship. Own. A founder-first program from Riddoff Technologies.
             </p>
+            <Link
+              to="/waitlist"
+              className="inline-flex items-center mt-4 px-4 py-2 text-sm font-semibold text-white bg-primary rounded-md hover:bg-primary/90 transition-colors no-underline"
+            >
+              Join the waitlist
+            </Link>
           </div>
 
           {columns.map((col) => (

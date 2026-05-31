@@ -235,5 +235,29 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // ─── Waitlist ─────────────────────────────────────────────────────────────
+    // Public, unauthenticated founding-member signups. Anyone may create a
+    // well-formed entry; only admins may read or manage them. The create guard
+    // validates shape/size so the open endpoint can't be used to dump junk.
+
+    match /waitlist/{id} {
+      allow read: if isAdmin();
+      allow create: if
+        request.resource.data.keys().hasOnly(
+          ['name', 'email', 'track', 'background', 'idea', 'status', 'createdAt', 'source']
+        )
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.email is string
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.track in ['builder', 'founder', 'equity', 'unsure']
+        && request.resource.data.background in ['working', 'self-taught', 'dropout', 'student']
+        && request.resource.data.idea is string
+        && request.resource.data.idea.size() <= 2000
+        && request.resource.data.status == 'new';
+      allow update, delete: if isAdmin();
+    }
   }
 }

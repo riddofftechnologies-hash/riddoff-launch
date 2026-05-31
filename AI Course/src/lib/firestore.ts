@@ -100,6 +100,8 @@ export const COLLECTIONS = {
   // Learning paths
   PATHS: "paths",
   UNITS: "units",
+  // Go-public
+  WAITLIST: "waitlist",
 } as const;
 
 // Bootcamps
@@ -270,7 +272,9 @@ export async function enrollUser(
   userId: string,
   courseId: string,
   courseTitle: string,
-  courseType: string
+  courseType: string,
+  displayName: string,
+  email: string
 ): Promise<void> {
   await setDoc(doc(db, COLLECTIONS.ENROLLMENTS, `${userId}_${courseId}`), {
     userId,
@@ -279,6 +283,9 @@ export async function enrollUser(
     paymentId: "legacy",
     courseTitle,
     courseType,
+    cohortName: courseTitle,
+    displayName,
+    email,
     status: "active",
     progress: 0,
     enrolledAt: new Date().toISOString(),
@@ -474,6 +481,40 @@ export const updateUnit = (id: string, data: object) =>
   update(COLLECTIONS.UNITS, id, data);
 
 export const deleteUnit = (id: string) => remove(COLLECTIONS.UNITS, id);
+
+// ─── Waitlist ─────────────────────────────────────────────────────────────────
+// Founding-member signups collected before public launch. Public create (see
+// firestore.rules); admin-only read. Status flows: new → contacted → converted.
+
+export interface WaitlistEntry {
+  name: string;
+  email: string;
+  track: "builder" | "founder" | "equity" | "unsure";
+  background: "working" | "self-taught" | "dropout" | "student";
+  idea: string;
+  status: "new" | "contacted" | "converted";
+  createdAt: string;
+  source: string;
+}
+
+export const createWaitlistEntry = (
+  data: Omit<WaitlistEntry, "status" | "createdAt" | "source"> & { source?: string }
+) =>
+  create<WaitlistEntry>(COLLECTIONS.WAITLIST, {
+    ...data,
+    source: data.source ?? "waitlist-page",
+    status: "new",
+    createdAt: new Date().toISOString(),
+  });
+
+export const getWaitlistEntries = <T = WaitlistEntry>() =>
+  getAll<T>(COLLECTIONS.WAITLIST, orderBy("createdAt", "desc"));
+
+export const updateWaitlistEntry = (id: string, data: Partial<WaitlistEntry>) =>
+  update<WaitlistEntry>(COLLECTIONS.WAITLIST, id, data);
+
+export const deleteWaitlistEntry = (id: string) =>
+  remove(COLLECTIONS.WAITLIST, id);
 
 // Utility: name → slug for instructor lookup
 export function nameToSlug(name: string): string {

@@ -29,7 +29,7 @@ export default function Header() {
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="What do you want to learn?"
+              placeholder="What do you want to build?"
               className="w-full pl-9 pr-4 py-2 text-sm border border-[#E0E0E0] rounded-full bg-[#F7F7F7] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
@@ -46,12 +46,24 @@ export default function Header() {
 
             {user ? (
               <div className="flex items-center gap-1">
-                <div className="flex items-center gap-2 px-3 py-2 text-sm text-foreground font-medium">
-                  <div className="w-7 h-7 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User size={14} className="text-primary" />
-                  </div>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-foreground font-medium rounded-md hover:bg-[#F7F7F7] transition-colors no-underline"
+                  aria-label="Open profile"
+                >
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className="w-7 h-7 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 bg-primary/10 rounded-full flex items-center justify-center">
+                      <User size={14} className="text-primary" />
+                    </div>
+                  )}
                   <span className="max-w-[120px] truncate">{displayName}</span>
-                </div>
+                </Link>
                 {(role === "admin" || role === "instructor") && (
                   <button
                     type="button"
@@ -82,10 +94,10 @@ export default function Header() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setModal("signup")}
+                  onClick={() => navigate("/waitlist")}
                   className="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-md hover:bg-primary/90 transition-colors"
                 >
-                  Join for Free
+                  Join the Waitlist
                 </button>
               </>
             )}
@@ -102,14 +114,27 @@ export default function Header() {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="What do you want to learn?"
+                placeholder="What do you want to build?"
                 className="w-full pl-9 pr-4 py-2 text-sm border border-[#E0E0E0] rounded-full bg-[#F7F7F7] focus:outline-none"
               />
             </div>
             {user ? (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground truncate">{displayName}</span>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 py-2 text-sm font-medium text-foreground truncate no-underline"
+                  >
+                    {user.photoURL ? (
+                      <img src={user.photoURL} alt="" className="w-6 h-6 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
+                        <User size={12} className="text-primary" />
+                      </div>
+                    )}
+                    <span className="truncate">{displayName}</span>
+                  </Link>
                   <button
                     type="button"
                     onClick={() => signOut()}
@@ -141,10 +166,10 @@ export default function Header() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setMobileOpen(false); setModal("signup"); }}
+                  onClick={() => { setMobileOpen(false); navigate("/waitlist"); }}
                   className="flex-1 py-2 text-sm font-semibold text-white bg-primary rounded-md"
                 >
-                  Join for Free
+                  Join the Waitlist
                 </button>
               </div>
             )}
