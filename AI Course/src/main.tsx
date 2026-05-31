@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Pricing from "./pages/Pricing";
 import Waitlist from "./pages/Waitlist";
 import Careers from "./pages/Careers";
 import CourseDetail from "./pages/CourseDetail";
@@ -28,10 +30,14 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Exploration stays at the root — browsing is open, no gate. */}
-            <Route path="/" element={<Careers />} />
-            {/* Waitlist shows at the join / create-account moment, not the door. */}
+            {/* Founder-first program is the homepage. */}
+            <Route path="/" element={<Home />} />
+            {/* Pricing — the three tracks. */}
+            <Route path="/pricing" element={<Pricing />} />
+            {/* Waitlist shows at the join / create-account moment. */}
             <Route path="/waitlist" element={<Waitlist />} />
+            {/* Course catalog moved off the homepage — launching later. */}
+            <Route path="/courses" element={<Careers />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route
               path="/profile"

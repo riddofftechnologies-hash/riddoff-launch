@@ -37,6 +37,18 @@ export default function Header() {
           <div className="flex-1" />
 
           <nav className="hidden sm:flex items-center gap-1">
+            <Link
+              to="/pricing"
+              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
+            >
+              Pricing
+            </Link>
+            <Link
+              to="/courses"
+              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
+            >
+              Courses
+            </Link>
             <a
               href="https://www.riddoff.com"
               className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
