@@ -20,6 +20,7 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName?: string) => Promise<void>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -75,8 +76,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await firebaseSignOut(auth);
   }
 
+  async function refreshUser() {
+    if (!auth.currentUser) return;
+    await auth.currentUser.reload();
+    // reload() mutates auth.currentUser in place; clone-ish via spread so React picks up the change
+    setUser({ ...auth.currentUser } as User);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, role, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, role, loading, signIn, signUp, signOut, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

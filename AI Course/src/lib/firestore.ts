@@ -510,6 +510,21 @@ export const createWaitlistEntry = (
 export const getWaitlistEntries = <T = WaitlistEntry>() =>
   getAll<T>(COLLECTIONS.WAITLIST, orderBy("createdAt", "desc"));
 
+// A signed-in user's own entry, matched by email. Rules permit this only
+// when the auth email matches the entry email — admin can read anyone's.
+export async function getWaitlistEntryByEmail<T = WaitlistEntry>(
+  email: string
+): Promise<(T & { id: string }) | null> {
+  const q = query(
+    collection(db, COLLECTIONS.WAITLIST),
+    where("email", "==", email.toLowerCase())
+  );
+  const snap = await getDocs(q);
+  if (snap.empty) return null;
+  const d = snap.docs[0];
+  return { id: d.id, ...(d.data() as T) };
+}
+
 export const updateWaitlistEntry = (id: string, data: Partial<WaitlistEntry>) =>
   update<WaitlistEntry>(COLLECTIONS.WAITLIST, id, data);
 

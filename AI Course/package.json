@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "seed": "node scripts/seed.mjs",
-    "setup": "node scripts/gcp-setup.mjs"
+    "setup": "node scripts/gcp-setup.mjs",
+    "backfill:enrollment-names": "node scripts/backfill-enrollment-names.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.10",

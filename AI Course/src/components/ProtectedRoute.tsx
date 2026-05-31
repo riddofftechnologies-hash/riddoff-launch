@@ -17,7 +17,10 @@ export default function ProtectedRoute({ children, requiredRole }: Props) {
     );
   }
 
-  if (!user) return <Navigate to="/admin/login" replace />;
+  if (!user) {
+    // No role required → it's a student-facing page; bounce to home where the login modal lives
+    return <Navigate to={requiredRole ? "/admin/login" : "/"} replace />;
+  }
 
   if (requiredRole === "admin" && role !== "admin") {
     return <Navigate to="/" replace />;

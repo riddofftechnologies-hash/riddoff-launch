@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminLogin() {
@@ -8,6 +10,8 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [attempted, setAttempted] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const { signIn, role, user } = useAuth();
   const navigate = useNavigate();
 
@@ -18,6 +22,20 @@ export default function AdminLogin() {
     else if (role === "instructor") navigate("/instructor", { replace: true });
     else navigate("/", { replace: true });
   }, [attempted, user, role, navigate]);
+
+  async function handleForgotPassword() {
+    if (!email) { setError("Enter your email address first."); return; }
+    setResetLoading(true);
+    setError("");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetSent(true);
+    } catch {
+      setError("Could not send reset email. Check the address and try again.");
+    } finally {
+      setResetLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -55,7 +73,17 @@ export default function AdminLogin() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Password</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-foreground">Password</label>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={resetLoading}
+                className="text-xs text-primary hover:underline disabled:opacity-50"
+              >
+                {resetLoading ? "Sending…" : "Forgot password?"}
+              </button>
+            </div>
             <input
               type="password"
               value={password}
@@ -65,6 +93,11 @@ export default function AdminLogin() {
               placeholder="••••••••"
             />
           </div>
+          {resetSent && (
+            <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+              Reset email sent to {email} — check your inbox.
+            </p>
+          )}
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               {error}

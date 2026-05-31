@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Zap, Eye, EyeOff } from "lucide-react";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 
 type Tab = "login" | "signup";
@@ -70,6 +72,22 @@ export default function AuthModal({ defaultTab = "login", onClose }: Props) {
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+
+  async function handleForgotPassword() {
+    if (!email) { setError("Enter your email address first, then click Forgot password."); return; }
+    setResetLoading(true);
+    setError("");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetSent(true);
+    } catch {
+      setError("Couldn't send reset email. Check the address and try again.");
+    } finally {
+      setResetLoading(false);
+    }
+  }
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -192,15 +210,31 @@ export default function AuthModal({ defaultTab = "login", onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-foreground">Password</label>
+              {tab === "login" && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={resetLoading}
+                  className="text-xs text-primary hover:underline disabled:opacity-50"
+                >
+                  {resetLoading ? "Sending…" : "Forgot password?"}
+                </button>
+              )}
+            </div>
             <PasswordInput
               value={password}
               onChange={setPassword}
               required
             />
           </div>
+
+          {resetSent && (
+            <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+              Reset link sent to <strong>{email}</strong> — check your inbox.
+            </p>
+          )}
 
           {tab === "signup" && (
             <div>

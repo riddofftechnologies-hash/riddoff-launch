@@ -14,9 +14,18 @@ export function useEnrollment(courseId: string, courseTitle: string, courseType:
   });
 
   const enrollMutation = useMutation({
-    mutationFn: () => enrollUser(user!.uid, courseId, courseTitle, courseType),
+    mutationFn: () =>
+      enrollUser(
+        user!.uid,
+        courseId,
+        courseTitle,
+        courseType,
+        user!.displayName ?? user!.email?.split("@")[0] ?? "",
+        user!.email ?? ""
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["enrollment", user?.uid, courseId] });
+      queryClient.invalidateQueries({ queryKey: ["enrollments"] });
     },
   });
 
