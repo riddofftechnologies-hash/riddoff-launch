@@ -242,7 +242,10 @@ service cloud.firestore {
     // validates shape/size so the open endpoint can't be used to dump junk.
 
     match /waitlist/{id} {
-      allow read: if isAdmin();
+      // Admins read all; a signed-in user can read their own entry (by email match)
+      // so the student dashboard can show their waitlist status.
+      allow read: if isAdmin()
+                  || (isSignedIn() && request.auth.token.email == resource.data.email);
       allow create: if
         request.resource.data.keys().hasOnly(
           ['name', 'email', 'track', 'background', 'idea', 'status', 'createdAt', 'source']
