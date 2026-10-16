@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, ArrowUpRight, Boxes, ChartNoAxesCombined, Command, Fingerprint, Layers3, MoveUpRight, ShieldCheck, Workflow, Zap } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Boxes, ChartNoAxesCombined, Fingerprint, Layers3, MoveUpRight, ShieldCheck, Workflow, Zap } from "lucide-react";
 import "./IndexCinematic.css";
 
 const easing = [0.22, 1, 0.36, 1] as const;
