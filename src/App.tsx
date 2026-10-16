@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
-import Index from "./pages/Index";
+import Index from "./pages/IndexCinematic";
 import Products from "./pages/Products";
 import RiddoffERP from "./pages/RiddoffERP";
 import Solutions from "./pages/Solutions";
