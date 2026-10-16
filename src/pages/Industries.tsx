@@ -1,70 +1,32 @@
-import { motion } from "framer-motion";
-import { Factory, Heart, ShoppingBag, Truck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
+import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
 
 const industries = [
-  {
-    icon: Factory,
-    title: "Manufacturing",
-    subtitle: "From local workshops to global factories.",
-    desc: "Grow your operations with a system that adapts while maintaining your production standards. Features include shop floor control, BOM management, and quality assurance.",
-  },
-  {
-    icon: Heart,
-    title: "Non-profits",
-    subtitle: "Fund tracking, transparency, and compliance.",
-    desc: "Secure donor trust by showing exactly how their contributions are driving real-world change along with ironclad financial governance and grant management.",
-  },
-  {
-    icon: ShoppingBag,
-    title: "Retail",
-    subtitle: "Backend for multi-channel empires.",
-    desc: "Grow your business from a single shop to a multi-channel empire with a backend that manages your entire retail operations, including POS and e-commerce sync.",
-  },
-  {
-    icon: Truck,
-    title: "Distribution",
-    subtitle: "Automated network fulfillment.",
-    desc: "Serve more customers by automating distribution across your network, allowing you to enter new markets with zero friction. Optimized for logistics and wholesale.",
-  },
+  { title: "Manufacturing", description: "Coordinate materials, production activity and the operational work that keeps orders moving." },
+  { title: "Retail & distribution", description: "Make day-to-day visibility across sales, stock and fulfillment easier for teams." },
+  { title: "Service businesses", description: "Bring customer requests, follow-ups and internal work into a more connected view." },
+  { title: "Growing organizations", description: "Create consistent operating practices as teams, locations and responsibilities evolve." },
 ];
 
 const Industries = () => (
-  <div>
-    {/* Hero */}
-    <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-hero">
-      <div className="container mx-auto max-w-3xl text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <h1 className="font-melodrama text-3xl sm:text-4xl md:text-6xl font-extrabold text-foreground mb-4 sm:mb-6">Industries</h1>
-          <p className="font-satoshi text-lg text-muted-foreground">
-            Where our software runs businesses, not just interfaces.
-          </p>
-        </motion.div>
+  <div className="mp-page">
+    <PageIntro eyebrow="RIDDOFF / INDUSTRIES" title="Built around real business." description="Different industries need different workflows. We begin with practical needs, rather than treating every company the same."/>
+    <section className="mp-section">
+      <div className="mp-wrap">
+        <div className="mp-section-label">WHERE WE FOCUS</div>
+        <h2 className="mp-section-title">Different work. Shared need for clarity.</h2>
+        <div className="mp-link-list">
+          {industries.map((item,i) => (
+            <Link className="mp-link-row" key={item.title} to="/contact">
+              <span className="mp-link-row-number">0{i+1}</span><strong>{item.title}</strong><span>{item.description}</span><ArrowUpRight size={18} aria-hidden="true"/>
+            </Link>
+          ))}
+        </div>
+        <p className="mp-disclosure">Illustrative use cases. Industry-specific fit and product readiness should be confirmed in a discussion with our team.</p>
       </div>
     </section>
-
-    {/* Industry cards */}
-    <section className="py-12 sm:py-20 px-4 sm:px-6">
-      <div className="container mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-        {industries.map((item, i) => (
-          <motion.div
-            key={item.title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="bg-card rounded-2xl p-5 sm:p-8 shadow-card border border-border hover:shadow-elevated transition-all duration-300"
-          >
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
-              <item.icon className="text-primary" size={28} />
-            </div>
-            <h3 className="font-melodrama text-xl font-bold text-foreground mb-1">{item.title}</h3>
-            <p className="font-satoshi text-sm font-medium text-primary mb-3">{item.subtitle}</p>
-            <p className="font-satoshi text-muted-foreground leading-relaxed">{item.desc}</p>
-          </motion.div>
-        ))}
-      </div>
-    </section>
+    <PageCTA title="Let's understand your industry." description="Show us the details of your workflow. We'll explore what's appropriate for your business."/>
   </div>
 );
-
 export default Industries;

@@ -1,45 +1,32 @@
-import { motion } from "framer-motion";
-import { Workflow, BrainCircuit, CloudCog, Layers } from "lucide-react";
+import { Link } from "react-router-dom";
+import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
+import { ArrowUpRight } from "lucide-react";
 
 const solutions = [
-  { icon: Workflow, title: "Process Automation", desc: "Eliminate manual workflows with intelligent automation that scales with your business. From invoice processing to order fulfillment." },
-  { icon: BrainCircuit, title: "AI-Powered Insights", desc: "Leverage machine learning to predict demand, optimize inventory, and uncover revenue opportunities hidden in your data." },
-  { icon: CloudCog, title: "Cloud Integration", desc: "Connect your existing tools seamlessly. Native integrations with 200+ platforms and a robust API for custom connections." },
-  { icon: Layers, title: "Multi-Entity Management", desc: "Manage multiple business units, locations, and currencies from a single unified platform without complexity." },
+  { title: "Operational visibility", description: "Bring important business information into a clearer view, so teams can spend less time finding context." },
+  { title: "Connected workflows", description: "Understand how requests, work and decisions move across people and departments." },
+  { title: "Customer operations", description: "Keep relationships, enquiries and follow-ups organized around the work that matters." },
+  { title: "Thoughtful automation", description: "Explore appropriate assistance and workflow automation with explicit human oversight where needed." },
 ];
 
 const Solutions = () => (
-  <div>
-    <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-hero">
-      <div className="container mx-auto max-w-3xl text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <h1 className="font-melodrama text-3xl sm:text-4xl md:text-6xl font-extrabold text-foreground mb-4 sm:mb-6">Solutions</h1>
-          <p className="font-satoshi text-lg text-muted-foreground">Tailored approaches to your most complex operational challenges.</p>
-        </motion.div>
+  <div className="mp-page">
+    <PageIntro eyebrow="RIDDOFF / SOLUTIONS" title="Make room for better work." description="Connected systems, clearer responsibilities and useful information. Our approach starts with understanding how your business really works."/>
+    <section className="mp-section">
+      <div className="mp-wrap">
+        <div className="mp-section-label">HOW WE HELP</div>
+        <h2 className="mp-section-title">The essentials, thoughtfully connected.</h2>
+        <div className="mp-link-list">
+          {solutions.map((s,i) => (
+            <Link to="/contact" className="mp-link-row" key={s.title}>
+              <span className="mp-link-row-number">0{i+1}</span><strong>{s.title}</strong><span>{s.description}</span><ArrowUpRight size={18} aria-hidden="true"/>
+            </Link>
+          ))}
+        </div>
+        <p className="mp-disclosure">Capabilities, integrations and deployment options are assessed based on each organization's requirements.</p>
       </div>
     </section>
-
-    <section className="py-12 sm:py-20 px-4 sm:px-6">
-      <div className="container mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-        {solutions.map((s, i) => (
-          <motion.div
-            key={s.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="bg-card rounded-2xl p-5 sm:p-8 shadow-card border border-border hover:shadow-elevated transition-all duration-300"
-          >
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
-              <s.icon className="text-primary" size={28} />
-            </div>
-            <h3 className="font-melodrama text-xl font-bold text-foreground mb-3">{s.title}</h3>
-            <p className="font-satoshi text-muted-foreground leading-relaxed">{s.desc}</p>
-          </motion.div>
-        ))}
-      </div>
-    </section>
+    <PageCTA title="Bring us your biggest bottleneck." description="We'll talk through your current process and where improved systems could help."/>
   </div>
 );
-
 export default Solutions;

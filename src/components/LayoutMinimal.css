@@ -1,0 +1,57 @@
+/* Shared marketing navigation and footer; no floating nav, 3D effects, or animation loops. */
+.r-shell { min-height: 100vh; display: flex; flex-direction: column; background: white; }
+.r-shell-main { flex: 1; min-width: 0; }
+.r-shell-skip { position: fixed; top: -80px; left: 16px; z-index: 120; background: #1f3440; color: #fff; padding: 10px 14px; border-radius: 4px; }
+.r-shell-skip:focus { top: 12px; }
+.r-shell-header { position: sticky; top: 0; z-index: 70; background: rgba(255,255,255,.97); border-bottom: 1px solid #e7eaed; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.r-shell-nav { max-width: 1200px; width: calc(100% - 88px); height: 74px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.r-shell-logo { display: inline-block; white-space: nowrap; color: #1b2a33; font-size: 26px; font-weight: 750; letter-spacing: -.077em; line-height: 1.2; text-decoration: none; }
+.r-shell-logo span { color: #54788b; }
+.r-shell-logo:hover { color: #1b2a33; }
+.r-shell-desktop-nav { display: flex; align-items: center; justify-content: center; gap: 31px; margin-left: auto; }
+.r-shell-nav-link { color: #6a7781; font-size: 13px; font-weight: 530; white-space: nowrap; transition: color .2s; text-decoration: none; }
+.r-shell-nav-link:hover, .r-shell-nav-link.active { color: #1b2a33; }
+.r-shell-header-actions { display: flex; align-items: center; gap: 12px; }
+.r-shell-demo-link { min-height: 40px; background: #1d2d38; color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 13px; border-radius: 6px; padding: 10px 15px; font-size: 12px; font-weight: 660; white-space: nowrap; text-decoration: none; transition: background .2s; }
+.r-shell-demo-link:hover { background: #35576a; color: white; }
+.r-shell-menu-button { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid #e3e7ea; border-radius: 6px; color: #1e303c; background: #fff; }
+.r-shell-mobile-nav { display: none; }
+.r-shell-footer { background: #fff; border-top: 1px solid #e8ebed; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 73px max(44px, calc((100% - 1200px)/2)) 24px; }
+.r-shell-footer-grid { display: grid; grid-template-columns: 1.45fr .7fr .7fr 1fr; gap: 40px; }
+.r-shell-footer-brand p { font-size: 13px; line-height: 1.8; color: #89969f; margin-top: 24px; }
+.r-shell-footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 15px; }
+.r-shell-footer-column h2 { font-family: inherit; font-size: 12px; font-weight: 720; color: #273b47; margin-bottom: 5px; }
+.r-shell-footer-column a { font-size: 13px; color: #84929a; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color .2s; }
+.r-shell-footer-column a:hover { color: #315f77; }
+.r-shell-footer-column p { font-size: 12px; color: #9da7ae; line-height: 1.7; max-width: 240px; }
+.r-shell-footer-bottom { border-top: 1px solid #edf0f1; margin-top: 72px; padding-top: 21px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #98a3aa; font-size: 11px; }
+.r-shell a:focus-visible, .r-shell button:focus-visible { outline: 3px solid #84aeba; outline-offset: 3px; }
+@media(max-width: 1010px) {
+  .r-shell-desktop-nav { gap: 16px; }
+  .r-shell-nav { gap: 20px; }
+  .r-shell-footer-grid { gap: 24px; }
+}
+@media(max-width: 800px) {
+  .r-shell-nav { width: calc(100% - 44px); height: 65px; }
+  .r-shell-desktop-nav { display: none; }
+  .r-shell-menu-button { display: inline-flex; }
+  .r-shell-demo-link { min-height: 39px; }
+  .r-shell-mobile-nav { display: flex; flex-direction: column; gap: 0; border-top: 1px solid #e8eced; background: white; padding: 7px 22px 22px; }
+  .r-shell-mobile-nav>a { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 15px 0; font-size: 14px; color: #31434f; border-bottom: 1px solid #eef0f1; text-decoration: none; }
+  .r-shell-mobile-nav>a.active { color: #2d617a; font-weight: 700; }
+  .r-shell-mobile-nav>a.r-shell-mobile-cta { display: none; }
+  .r-shell-footer { padding: 58px 22px 22px; }
+  .r-shell-footer-grid { grid-template-columns: 1.3fr 1fr; gap: 40px; }
+  .r-shell-footer-bottom { margin-top: 50px; }
+}
+@media(max-width: 480px) {
+  .r-shell-nav { width: calc(100% - 36px); height: 62px; gap: 8px; }
+  .r-shell-logo { font-size: 24px; }
+  .r-shell-demo-link { font-size: 11px; padding: 9px 12px; gap: 7px; }
+  .r-shell-footer-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
+  .r-shell-footer-brand { grid-column: span 2; }
+  .r-shell-footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .r-shell * { transition: none !important; }
+}
