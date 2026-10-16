@@ -15,8 +15,23 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: "Message sent!", description: "We'll get back to you within 24 hours." });
-    setForm({ name: "", email: "", company: "", message: "", industry: "", scale: "", timeline: "" });
+    // This website has no verified form-delivery backend. Open a real email draft
+    // instead of misleading users with a fabricated "message sent" confirmation.
+    const subject = "Riddoff enquiry" + (form.company ? " — " + form.company : "");
+    const body = [
+      "Name: " + form.name,
+      "Email: " + form.email,
+      "Company: " + (form.company || "Not provided"),
+      "Industry: " + (form.industry || "Not specified"),
+      "Company size: " + (form.scale || "Not specified"),
+      "Timeline: " + (form.timeline || "Not specified"),
+      "",
+      form.message,
+    ].join("\\n");
+    const mailto = "mailto:system@riddoff.com?subject=" +
+      encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    window.location.href = mailto;
+    toast({ title: "Email draft requested", description: "Send the message from your email application to complete your enquiry." });
   };
 
   return (
@@ -145,13 +160,14 @@ const Contact = () => {
                   </div>
                 </div>
 
+                <p className="text-sm text-muted-foreground">This opens your email application with your enquiry. Your message is not sent until you send it from your email app.</p>
                 {/* Divider + Submit */}
                 <div className="border-t border-border pt-6 flex justify-end">
                   <button
                     type="submit"
                     className="font-melodrama bg-secondary text-secondary-foreground px-8 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
                   >
-                    Send message
+                    Open email draft
                   </button>
                 </div>
               </form>
@@ -168,7 +184,7 @@ const Contact = () => {
           >
             <div>
               <h2 className="font-melodrama text-2xl font-bold text-foreground mb-2">Reach Us</h2>
-              <p className="font-satoshi text-sm text-muted-foreground">We typically respond within 24 hours.</p>
+              <p className="font-satoshi text-sm text-muted-foreground">Reach out by email or phone to discuss your requirements.</p>
             </div>
             {[
               { icon: Mail, label: "Email", value: "system@riddoff.com" },
