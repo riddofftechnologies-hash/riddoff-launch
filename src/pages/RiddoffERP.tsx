@@ -1,108 +1,66 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Users, ClipboardList, Package, Factory, Calculator, BarChart3, UserCheck, ListTodo } from "lucide-react";
-import { SalesDashboardMockup } from "@/pages/erp/Sales";
-import DashboardFrame from "@/components/DashboardFrame";
+import { ArrowUpRight } from "lucide-react";
+import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
 
 const modules = [
-  { icon: ShoppingCart, title: "Sales", desc: "Manage orders, invoices, and customer transactions with ease.", href: "/products/riddoff-erp/sales" },
-  { icon: Users, title: "CRM", desc: "Build stronger relationships with integrated customer data.", href: "/products/riddoff-erp/crm" },
-  { icon: ClipboardList, title: "Procurement", desc: "Streamline your purchasing process and vendor management.", href: "/products/riddoff-erp/procurement" },
-  { icon: Package, title: "Inventory", desc: "Real-time tracking of stock levels and warehouse operations.", href: "/products/riddoff-erp/inventory" },
-  { icon: Factory, title: "Manufacturing", desc: "Optimize production planning and quality control.", href: "/products/riddoff-erp/manufacturing" },
-  { icon: Calculator, title: "Accounts", desc: "Comprehensive financial management and bookkeeping.", href: "/products/riddoff-erp/accounts" },
-  { icon: BarChart3, title: "Reports", desc: "Data-driven insights with customisable reporting tools.", href: "/products/riddoff-erp/reports" },
-  { icon: UserCheck, title: "HR & Payroll", desc: "Simplified employee management and automated payroll.", href: "/products/riddoff-erp/hr-payroll" },
-  { icon: ListTodo, title: "Task", desc: "Efficient project management and personalised task tracking.", href: "/products/riddoff-erp/task" },
+  { title: "Sales", description: "A shared view of sales activity and customer follow-ups.", href: "/products/riddoff-erp/sales" },
+  { title: "Customer relationships", description: "Organize customer information and related work.", href: "/products/riddoff-erp/crm" },
+  { title: "Inventory", description: "Keep track of stock workflows and operational context.", href: "/products/riddoff-erp/inventory" },
+  { title: "Procurement", description: "Bring purchasing needs and handoffs into view.", href: "/products/riddoff-erp/procurement" },
+  { title: "Manufacturing", description: "Explore workflows for production-related operations.", href: "/products/riddoff-erp/manufacturing" },
+  { title: "Reports", description: "Explore business intelligence and reporting experiences.", href: "/products/riddoff-erp/reports" },
+  { title: "Accounts", description: "Understand accounting-related workflows in context.", href: "/products/riddoff-erp/accounts" },
+  { title: "Team & payroll", description: "Explore people and payroll workflows.", href: "/products/riddoff-erp/hr-payroll" },
+  { title: "Task management", description: "Organize work, ownership and next steps.", href: "/products/riddoff-erp/task" },
 ];
 
-
-const RiddoffERP = () => {
-  return (
-    <div>
-      {/* Hero */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-hero">
-        <div className="container mx-auto max-w-4xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block bg-primary/10 text-primary px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6">
-              Rabos ERP
-            </span>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-extrabold text-foreground mb-4 sm:mb-6">
-              Rabos ERP
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-              Experience the future of enterprise management with our comprehensive and intuitive dashboard.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Dashboard */}
-      <section className="py-8 sm:py-16 px-3 sm:px-6 -mt-4 sm:-mt-8">
-        <div className="container mx-auto max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <DashboardFrame naturalWidth={900}>
-              <SalesDashboardMockup />
-            </DashboardFrame>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Modules */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <div className="container mx-auto max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10 sm:mb-16"
-          >
-            <span className="text-xs sm:text-sm font-medium text-primary mb-2 block">Modules</span>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
-              Comprehensive ERP Solutions
-            </h2>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto px-2">
-              Everything you need to run your business efficiently, all in one integrated platform.
-            </p>
-          </motion.div>
-
-          {/* Module cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            {modules.map((m, i) => (
-              <motion.div
-                key={m.title}
-                initial={{ opacity: 0, y: 30, rotate: -1 }}
-                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-              >
-                <Link
-                  to={m.href}
-                  className="block bg-card rounded-2xl p-5 sm:p-6 shadow-card border border-border hover:shadow-elevated transition-shadow duration-300 cursor-pointer group h-full"
-                >
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-colors">
-                    <m.icon className="text-primary" size={20} />
-                  </div>
-                  <h3 className="font-display text-base sm:text-lg font-bold text-foreground mb-1 sm:mb-2">{m.title}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{m.desc}</p>
-                </Link>
-              </motion.div>
-            ))}
+const RiddoffERP = () => (
+  <div className="mp-page">
+    <PageIntro eyebrow="THE PLATFORM / RABOS" title="Your business, in one clearer view." description="RABOS is Riddoff's business operating system—a connected approach to the work, information and decisions behind everyday operations.">
+      <div className="mp-intro-actions"><Link to="/contact" className="mp-button">Discuss RABOS <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
+    </PageIntro>
+    <section className="mp-section">
+      <div className="mp-wrap">
+        <div className="mp-section-label">THE IDEA BEHIND RABOS</div>
+        <div className="mp-split" style={{alignItems:"start", marginTop:50}}>
+          <h2 className="mp-section-title" style={{marginTop:0}}>One system. A more connected way of working.</h2>
+          <div>
+            <p className="mp-section-description">As businesses grow, their tools often become separated from the work they're meant to support. RABOS is designed to connect operational context across business functions.</p>
+            <p className="mp-section-description" style={{marginTop:22}}>Our goal is to make information accessible, responsibilities visible and workflows easier to manage—while evolving toward smarter assistance.</p>
           </div>
         </div>
-      </section>
-    </div>
-  );
-};
-
+      </div>
+    </section>
+    <section className="mp-section mp-section-muted">
+      <div className="mp-wrap">
+        <div className="mp-section-label">EXPLORE THE AREAS</div>
+        <h2 className="mp-section-title">Built for the work that matters.</h2>
+        <p className="mp-section-description">Explore interface and workflow concepts across key business functions.</p>
+        <div className="mp-link-list">
+          {modules.map((item,i) => (
+            <Link key={item.href} to={item.href} className="mp-link-row">
+              <span className="mp-link-row-number">{String(i+1).padStart(2,"0")}</span>
+              <strong>{item.title}</strong>
+              <span>{item.description}</span>
+              <ArrowUpRight size={17} aria-hidden="true"/>
+            </Link>
+          ))}
+        </div>
+        <p className="mp-disclosure">These module pages can contain illustrative examples. Confirm deployment readiness, integrations and current functionality with the Riddoff team before relying on a feature.</p>
+      </div>
+    </section>
+    <section className="mp-section">
+      <div className="mp-wrap">
+        <div className="mp-split" style={{alignItems:"start"}}>
+          <div><span className="mp-overline">BUILDING RESPONSIBLY</span><h2 className="mp-section-title">Intelligence with people in control.</h2></div>
+          <div>
+            <p className="mp-section-description">We are building toward systems that can surface information, assist decisions and increasingly coordinate work. Human oversight and accurate product descriptions matter throughout that journey.</p>
+            <p className="mp-callout">Autonomous operation is a long-term direction, not a guarantee that all business functions already run autonomously.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <PageCTA title="Let's explore RABOS together." description="Share your business needs and we'll discuss a suitable path forward."/>
+  </div>
+);
 export default RiddoffERP;
