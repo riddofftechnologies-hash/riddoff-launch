@@ -27,7 +27,7 @@ const Contact = () => {
       "Timeline: " + (form.timeline || "Not specified"),
       "",
       form.message,
-    ].join("\\n");
+    ].join("\n");
     const mailto = "mailto:system@riddoff.com?subject=" +
       encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
     window.location.href = mailto;
