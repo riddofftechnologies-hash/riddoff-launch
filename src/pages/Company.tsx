@@ -10,7 +10,7 @@ const principles = [
 
 const Company = () => (
   <div className="mp-page">
-    <PageIntro eyebrow="ABOUT / RIDDOFF TECHNOLOGIES" title="Building a more thoughtful kind of business software." description="Riddoff is focused on connected operating experiences that help teams do good work with less friction."/>
+    <PageIntro eyebrow="ABOUT / RIDDOFF TECHNOLOGIES" title="Building a more thoughtful kind of business software." description="Riddoff builds two connected product directions: RABOS for business operations and Riddoff Control for AI-supported founder operations."/>
     <section className="mp-section">
       <div className="mp-wrap">
         <div className="mp-section-label">OUR PERSPECTIVE</div>
@@ -18,7 +18,7 @@ const Company = () => (
           <h2 className="mp-section-title" style={{marginTop:0}}>Work should feel more connected.</h2>
           <div>
             <p className="mp-section-description">Business systems are often built around separate functions. We believe the better approach is to understand how information, decisions and people move across those boundaries.</p>
-            <p className="mp-section-description" style={{marginTop:20}}>RABOS represents that direction: one more coherent place to understand and run everyday operations.</p>
+            <p className="mp-section-description" style={{marginTop:20}}>RABOS applies this approach to business operations. Riddoff Control brings it to the engineering, support and operational work of building a software company.</p>
           </div>
         </div>
       </div>
