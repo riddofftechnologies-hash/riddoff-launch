@@ -1,32 +1,18 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
+import { IndustrySolutions } from "@/components/RabosInteractive";
+import { ActionLink, Reveal } from "@/components/ShowcaseMotion";
+import "./ShowcaseExperience.css";
 
-const industries = [
-  { title: "Manufacturing", description: "Coordinate materials, production activity and the operational work that keeps orders moving." },
-  { title: "Retail & distribution", description: "Make day-to-day visibility across sales, stock and fulfillment easier for teams." },
-  { title: "Service businesses", description: "Bring customer requests, follow-ups and internal work into a more connected view." },
-  { title: "Growing organizations", description: "Create consistent operating practices as teams, locations and responsibilities evolve." },
-];
-
-const Industries = () => (
-  <div className="mp-page">
-    <PageIntro eyebrow="RIDDOFF / INDUSTRIES" title="Built around real business." description="Different industries need different workflows. We begin with practical needs, rather than treating every company the same."/>
-    <section className="mp-section">
-      <div className="mp-wrap">
-        <div className="mp-section-label">WHERE WE FOCUS</div>
-        <h2 className="mp-section-title">Different work. Shared need for clarity.</h2>
-        <div className="mp-link-list">
-          {industries.map((item,i) => (
-            <Link className="mp-link-row" key={item.title} to="/contact">
-              <span className="mp-link-row-number">0{i+1}</span><strong>{item.title}</strong><span>{item.description}</span><ArrowUpRight size={18} aria-hidden="true"/>
-            </Link>
-          ))}
-        </div>
-        <p className="mp-disclosure">Illustrative use cases. Industry-specific fit and product readiness should be confirmed in a discussion with our team.</p>
+export default function Industries(){
+  return <div className="rx-exp">
+    <section className="rx-rabos-hero" style={{paddingBottom:80}}>
+      <div className="rx-container">
+        <Reveal><span className="rx-eyebrow">INDUSTRIES / WORK THAT MATTERS</span><h1 style={{fontSize:"clamp(48px,6vw,83px)",maxWidth:900,fontWeight:600,lineHeight:1.1,margin:"27px 0"}}>Every industry has its own operating reality.</h1><p className="rx-lead">Start with the work. Build the right system around it.</p><p className="rx-secondary">Our product direction supports manufacturing, retail, distribution and service workflows, with specialist implementations where the needs differ.</p></Reveal>
       </div>
     </section>
-    <PageCTA title="Let's understand your industry." description="Show us the details of your workflow. We'll explore what's appropriate for your business."/>
-  </div>
-);
-export default Industries;
+    <IndustrySolutions/>
+    <section className="rx-home-future"><div className="rx-container rx-editorial-split"><Reveal><span className="rx-eyebrow">COMMON FOUNDATION / DISTINCT WORKFLOWS</span><h2>A shared backbone. Room for the details.</h2></Reveal><Reveal><p>Inventory, sales and finance are connected concerns across industries. Manufacturing adds specific needs such as design documents, material planning, estimates and production orders.</p><p>The Windoor aluminium and Azara tailoring programmes are designed with independent acceptance gates; progress in one cannot substitute for acceptance in the other.</p><Link to="/products/riddoff-erp#modules" className="rx-inline-link">Explore the RABOS modules <ArrowUpRight size={16}/></Link></Reveal></div></section>
+    <section className="rx-end-cta"><div className="rx-container rx-end-cta-inner"><Reveal><span className="rx-eyebrow">WORKFLOW DISCOVERY</span><h2>Tell us how your business works.</h2><p>We'll discuss which capabilities fit today and what would require a tailored rollout.</p></Reveal><ActionLink to="/contact">Start a conversation</ActionLink></div></section>
+  </div>;
+}

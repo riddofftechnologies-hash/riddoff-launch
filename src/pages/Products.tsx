@@ -1,47 +1,19 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import { PageIntro, PageCTA, TextArrowLink } from "@/components/MarketingBlocks";
+import { ArrowUpRight, Layers3, Network, ShieldCheck } from "lucide-react";
+import { ActionLink, Reveal, VisualFrame } from "@/components/ShowcaseMotion";
+import "./ShowcaseExperience.css";
 
-const Products = () => (
-  <div className="mp-page">
-    <PageIntro eyebrow="RIDDOFF / PRODUCTS" title="Technology made for the way you work." description="We build business software with one goal: making complex operations easier to understand, connect and manage.">
-      <div className="mp-intro-actions"><Link className="mp-button" to="/products/riddoff-erp">Explore RABOS <ArrowUpRight size={17} aria-hidden="true"/></Link></div>
-    </PageIntro>
-    <section className="mp-section">
-      <div className="mp-wrap">
-        <div className="mp-section-label">01 / FEATURED PLATFORM</div>
-        <div className="mp-featured">
-          <div>
-            <span className="mp-overline">BUSINESS OPERATING SYSTEM</span>
-            <h2>Meet RABOS.</h2>
-            <p>A connected business workspace designed to bring teams, operational processes and information into focus. Explore the core areas of the platform and the direction we're building toward.</p>
-            <TextArrowLink to="/products/riddoff-erp">Explore the platform</TextArrowLink>
-            <div className="mp-feature-note">Specific module availability and automation capabilities depend on deployment.</div>
-          </div>
-          <div className="mp-feature-illustration" aria-label="Illustration of the connected RABOS operating experience">
-            <div className="mp-feature-illustration-top"><span>RIDDOFF / RABOS</span><span>WORKSPACE CONCEPT</span></div>
-            <div className="mp-feature-illustration-core">
-              <span className="mp-feature-illustration-logo">rabos</span>
-              <strong>One connected workspace.</strong>
-              <p>Designed to bring the work of your business together.</p>
-            </div>
-            <div className="mp-feature-illustration-tags"><span>SALES</span><span>OPERATIONS</span><span>INVENTORY</span><span>INSIGHTS</span></div>
-          </div>
-        </div>
+export default function Products(){
+  return <div className="rx-exp">
+    <section className="rx-rabos-hero" style={{paddingBottom:70}}><div className="rx-container"><Reveal><span className="rx-eyebrow">RIDDOFF / PRODUCT FAMILY</span><h1 style={{fontSize:"clamp(49px,6.4vw,88px)",lineHeight:1.08,letterSpacing:"-.077em",fontWeight:600,maxWidth:870,margin:"27px 0"}}>Operating systems for the work that matters.</h1><p className="rx-lead" style={{maxWidth:670}}>One for the business. One for the company building and running the software behind it.</p></Reveal></div></section>
+    <section className="rx-home-products"><div className="rx-container">
+      <Reveal className="rx-section-heading"><div><span className="rx-eyebrow">TWO COMPLEMENTARY PRODUCTS</span><h2>Explore the Riddoff ecosystem.</h2></div><p>Understand the problem each platform is designed to solve, and what exists today.</p></Reveal>
+      <div className="rx-products-grid">
+        <Reveal className="rx-product-card"><div className="rx-product-card-top"><span>01 / BUSINESS OPERATING SYSTEM</span><Layers3 size={21}/></div><h3>RABOS</h3><p>Bring customer relationships, sales, procurement, stock, manufacturing and reporting into one operational context.</p><img className="rx-product-card-shot" src="/product-visuals/manufacturing-design-editor.png" loading="lazy" alt="RABOS manufacturing interface review capture"/><div className="rx-product-card-foot"><span>MODULES / SOLUTIONS / INTELLIGENCE</span><Link to="/products/riddoff-erp">Explore RABOS <ArrowUpRight size={17}/></Link></div></Reveal>
+        <Reveal delay={.08} className="rx-product-card rx-product-card-control"><div className="rx-product-card-top"><span>02 / AI WORKFORCE CONTROL</span><Network size={21}/></div><h3>Riddoff Control</h3><p>Coordinate founder-directed work across Master, Engineering, Support and Operations Dots with specialist agents and governed review.</p><div className="rx-product-dot-thumb"><div className="rx-product-dot-master"><span>M</span> MASTER DOT</div><div className="rx-product-dot-line"/><div className="rx-product-dot-roles"><span>ENGINEERING</span><span>SUPPORT</span><span>OPERATIONS</span></div><small><ShieldCheck size={13} style={{display:"inline",marginRight:6}}/> Human approvals and release gates</small></div><div className="rx-product-card-foot"><span>DEVELOPING / STAGED ACCESS</span><Link to="/products/riddoff-control">Explore Control <ArrowUpRight size={17}/></Link></div></Reveal>
       </div>
-    </section>
-    <section className="mp-section mp-section-muted">
-      <div className="mp-wrap">
-        <div className="mp-section-label">02 / OTHER INITIATIVES</div>
-        <h2 className="mp-section-title">Focused ideas for real industries.</h2>
-        <p className="mp-section-description">Riddoff also explores industry-specific software. Contact us for details and current availability.</p>
-        <div className="mp-pair-grid">
-          <div className="mp-pair"><span className="mp-pair-number">01</span><h3>FleetX</h3><p>Software direction focused on fleet and logistics coordination.</p><TextArrowLink to="/contact">Enquire about FleetX</TextArrowLink></div>
-          <div className="mp-pair"><span className="mp-pair-number">02</span><h3>GRYNDUP</h3><p>Software direction focused on fitness businesses and the everyday needs of their teams.</p><TextArrowLink to="/contact">Enquire about GRYNDUP</TextArrowLink></div>
-        </div>
-      </div>
-    </section>
-    <PageCTA title="Let's discuss your operations." description="Tell us what you're building and where a connected system could make a meaningful difference."/>
-  </div>
-);
-export default Products;
+    </div></section>
+    <section className="rx-home-problem"><div className="rx-container rx-editorial-split"><Reveal><span className="rx-eyebrow">OUR APPROACH</span><h2>Build useful systems. Explain what they can do.</h2></Reveal><Reveal><p>RABOS grounds the vision in real workflows and interface reviews. Riddoff Control extends that operational thinking into the founder-led software company.</p><p>Both products are described with care. Module availability, agent activation, pricing and integrations are confirmed through a customer conversation, not assumed.</p><Link to="/contact" className="rx-inline-link">Talk about your use case <ArrowUpRight size={16}/></Link></Reveal></div></section>
+    <section className="rx-end-cta"><div className="rx-container rx-end-cta-inner"><Reveal><span className="rx-eyebrow">WHAT ARE YOU BUILDING?</span><h2>Explore a better operating model.</h2><p>Talk to Riddoff about RABOS deployments, Riddoff Control pilots or software commercialization.</p></Reveal><ActionLink to="/contact">Start a conversation</ActionLink></div></section>
+  </div>;
+}

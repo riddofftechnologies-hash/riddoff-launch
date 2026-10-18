@@ -4,9 +4,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
-import Index from "./pages/IndexMinimal";
+import Index from "./pages/IndexShowcase";
 import Products from "./pages/Products";
-import RiddoffERP from "./pages/RiddoffERP";
+import RiddoffERP from "./pages/RabosShowcase";
+import RiddoffControl from "./pages/RiddoffControl";
 import Solutions from "./pages/Solutions";
 import Infrastructure from "./pages/Infrastructure";
 import Industries from "./pages/Industries";
@@ -40,6 +41,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/riddoff-erp" element={<RiddoffERP />} />
+            <Route path="/rabos" element={<RiddoffERP />} />
+            <Route path="/products/riddoff-control" element={<RiddoffControl />} />
+            <Route path="/control" element={<RiddoffControl />} />
             <Route path="/products/riddoff-erp/sales" element={<Sales />} />
             <Route path="/products/riddoff-erp/crm" element={<CRM />} />
             <Route path="/products/riddoff-erp/procurement" element={<Procurement />} />

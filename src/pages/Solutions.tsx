@@ -1,32 +1,15 @@
 import { Link } from "react-router-dom";
-import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
 import { ArrowUpRight } from "lucide-react";
-
-const solutions = [
-  { title: "Operational visibility", description: "Bring important business information into a clearer view, so teams can spend less time finding context." },
-  { title: "Connected workflows", description: "Understand how requests, work and decisions move across people and departments." },
-  { title: "Customer operations", description: "Keep relationships, enquiries and follow-ups organized around the work that matters." },
-  { title: "Thoughtful automation", description: "Explore appropriate assistance and workflow automation with explicit human oversight where needed." },
+import { PageIntro, PageCTA } from "@/components/MarketingBlocks";
+const areas = [
+{title:"Operations that don't connect",description:"Bring sales, inventory, purchasing and customer work together.",to:"/products/riddoff-erp#modules",cta:"Explore RABOS modules"},
+{title:"Complex manufacturing handoffs",description:"Connect design, estimates, BOMs, quotations and production planning.",to:"/products/riddoff-erp#solutions",cta:"View manufacturing journeys"},
+{title:"Disconnected customer context",description:"Keep customer interactions, follow-ups and operational responsibilities visible.",to:"/products/riddoff-erp#modules",cta:"Explore CRM and sales"},
+{title:"Founder-led delivery bottlenecks",description:"Coordinate specialist Dots and agents under clear governance and human review.",to:"/products/riddoff-control#dots",cta:"Meet the Dots"},
+{title:"Engineering work without release clarity",description:"See the scope, gates, runner outputs and operator approval boundaries in one path.",to:"/products/riddoff-control#how-it-works",cta:"See governed execution"},
 ];
-
-const Solutions = () => (
-  <div className="mp-page">
-    <PageIntro eyebrow="RIDDOFF / SOLUTIONS" title="Make room for better work." description="Connected systems, clearer responsibilities and useful information. Our approach starts with understanding how your business really works."/>
-    <section className="mp-section">
-      <div className="mp-wrap">
-        <div className="mp-section-label">HOW WE HELP</div>
-        <h2 className="mp-section-title">The essentials, thoughtfully connected.</h2>
-        <div className="mp-link-list">
-          {solutions.map((s,i) => (
-            <Link to="/contact" className="mp-link-row" key={s.title}>
-              <span className="mp-link-row-number">0{i+1}</span><strong>{s.title}</strong><span>{s.description}</span><ArrowUpRight size={18} aria-hidden="true"/>
-            </Link>
-          ))}
-        </div>
-        <p className="mp-disclosure">Capabilities, integrations and deployment options are assessed based on each organization's requirements.</p>
-      </div>
-    </section>
-    <PageCTA title="Bring us your biggest bottleneck." description="We'll talk through your current process and where improved systems could help."/>
-  </div>
-);
-export default Solutions;
+export default function Solutions(){return <div className="mp-page"><PageIntro eyebrow="RIDDOFF / SOLUTIONS" title="Start with the problem. Find the right operating system." description="Explore the everyday problems RABOS and Riddoff Control are designed to address—through real work, clearer context and thoughtfully governed automation."/>
+<section className="mp-section"><div className="mp-wrap"><div className="mp-section-label">CHOOSE THE CHALLENGE</div><h2 className="mp-section-title">Where is work getting stuck?</h2><div className="mp-link-list">{areas.map((x,i)=><Link className="mp-link-row" key={x.title} to={x.to}><span className="mp-link-row-number">{String(i+1).padStart(2,"0")}</span><strong>{x.title}</strong><span>{x.description}</span><ArrowUpRight size={18}/></Link>)}</div><p className="mp-disclosure">Product readiness, integrations, workflows and autonomy depend on deployment and explicit enablement. Illustrations do not guarantee live functionality.</p></div></section>
+<section className="mp-section mp-section-muted"><div className="mp-wrap"><div className="mp-section-label">TWO WAYS FORWARD</div><div className="mp-pair-grid"><div className="mp-pair"><h3>RABOS</h3><p>The business operating system: workspaces, transactions, reporting and connected operational context.</p><Link className="mp-text-link" to="/products/riddoff-erp">Explore RABOS <ArrowUpRight size={16}/></Link></div><div className="mp-pair"><h3>Riddoff Control</h3><p>The founder's AI workforce layer: specialist Dots, scoped agents, task evidence and human approvals.</p><Link className="mp-text-link" to="/products/riddoff-control">Explore Control <ArrowUpRight size={16}/></Link></div></div></div></section>
+<PageCTA title="Let's understand your workflow." description="Describe where information or handoffs become difficult. We'll discuss the right product and current capabilities."/>
+</div>}
