@@ -93,10 +93,25 @@ function Footer() {
   );
 }
 
+function RouteScroll() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      // Routed links to product chapters should land on the actual chapter.
+      const targetId = decodeURIComponent(hash.slice(1));
+      const frame = window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: "auto", block: "start" }));
+      return () => window.cancelAnimationFrame(frame);
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [pathname, hash]);
+  return null;
+}
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="r-shell">
       <a href="#main-content" className="r-shell-skip">Skip to main content</a>
+      <RouteScroll/>
       <Header/>
       <main className="r-shell-main" id="main-content">{children}</main>
       <Footer/>
