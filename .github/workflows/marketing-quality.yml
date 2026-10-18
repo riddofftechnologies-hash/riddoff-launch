@@ -1,0 +1,31 @@
+name: Marketing website quality
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package*.json"
+      - "index.html"
+      - "vite.config.ts"
+      - ".github/workflows/marketing-quality.yml"
+  push:
+    branches: [main, "feat/rabos-control-product-showcase"]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: TypeScript validation
+        run: npx tsc -p tsconfig.app.json --noEmit
+      - name: Unit tests
+        run: npm test -- --run
+      - name: Production bundle
+        run: npm run build
