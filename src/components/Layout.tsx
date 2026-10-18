@@ -5,10 +5,10 @@ import { ArrowRight, ArrowUpRight, Menu, X } from "lucide-react";
 import "./LayoutMinimal.css";
 
 const navigation = [
-  { label: "Platform", to: "/products/riddoff-erp" },
+  { label: "RABOS", to: "/products/riddoff-erp" },
+  { label: "Riddoff Control", to: "/products/riddoff-control" },
   { label: "Products", to: "/products" },
   { label: "Solutions", to: "/solutions" },
-  { label: "Industries", to: "/industries" },
   { label: "Company", to: "/company" },
 ];
 
@@ -66,12 +66,13 @@ function Footer() {
       <div className="r-shell-footer-grid">
         <div className="r-shell-footer-brand">
           <Link className="r-shell-logo" to="/" aria-label="Riddoff, home">riddoff<span>.</span></Link>
-          <p>Thoughtful business technology.<br/>Made for real operations.</p>
+          <p>Intelligent operating systems.<br/>For businesses and the teams behind them.</p>
         </div>
         <div className="r-shell-footer-column">
           <h2>Explore</h2>
           <Link to="/products/riddoff-erp">RABOS</Link>
-          <Link to="/products">Products</Link>
+          <Link to="/products/riddoff-control">Riddoff Control</Link>
+          <Link to="/products">All products</Link>
           <Link to="/solutions">Solutions</Link>
           <Link to="/industries">Industries</Link>
         </div>
@@ -87,7 +88,7 @@ function Footer() {
           <p>Tell us about the challenge you're trying to solve.</p>
         </div>
       </div>
-      <div className="r-shell-footer-bottom"><span>© {new Date().getFullYear()} Riddoff Technologies</span><span>Business systems, simplified.</span></div>
+      <div className="r-shell-footer-bottom"><span>© {new Date().getFullYear()} Riddoff Technologies</span><span>Systems that move work forward.</span></div>
     </footer>
   );
 }
